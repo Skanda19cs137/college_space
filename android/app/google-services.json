@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "129342571515",
+    "project_id": "collegespace-112534",
+    "storage_bucket": "collegespace-112534.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129342571515:android:d5cfc4f8e240dd02b9815e",
+        "android_client_info": {
+          "package_name": "com.dbydxofhalfengg.college_space"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129342571515-3jqe673ta2529aborppg1tklvevk9r5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC12YNanBlcmJsLi6dQVikSKgDPEW__ZB8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129342571515-3jqe673ta2529aborppg1tklvevk9r5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
