@@ -1,6 +1,7 @@
 import 'package:college_space/constants/Constantcolors.dart';
 import 'package:college_space/screens/Homepage/Homepage.dart';
 import 'package:college_space/screens/LandingPage/landingServices.dart';
+import 'package:college_space/screens/LandingPage/landingUtils.dart';
 import 'package:college_space/services/Authentication.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -128,7 +129,8 @@ class LandingHelpers with ChangeNotifier {
                               fontWeight: FontWeight.bold),
                         ),
                         onPressed: () {
-                          Provider.of<LandingService>(context,listen: false).logInSheet(context);
+                          Provider.of<LandingService>(context, listen: false)
+                              .logInSheet(context);
                         }),
                     MaterialButton(
                         color: constantColors.blueColor,
@@ -140,7 +142,8 @@ class LandingHelpers with ChangeNotifier {
                               fontWeight: FontWeight.bold),
                         ),
                         onPressed: () {
-                          Provider.of<LandingService>(context,listen: false).signUpSheet(context);
+                          Provider.of<landingUtils>(context, listen: false)
+                              .selectAvatarOptionsSheet(context);
                         }),
                   ],
                 )
