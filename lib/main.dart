@@ -1,7 +1,9 @@
 import 'package:college_space/constants/Constantcolors.dart';
+import 'package:college_space/screens/Feed/Feed_helpers.dart';
 import 'package:college_space/screens/LandingPage/landingHelpers.dart';
 import 'package:college_space/screens/LandingPage/landingServices.dart';
 import 'package:college_space/screens/Splashscreen/splashScreen.dart';
+import 'package:college_space/screens/UploadPost/uploadPost.dart';
 import 'package:college_space/services/Authentication.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
         providers: [
+          ChangeNotifierProvider(create: (_) => Authentication()),
+          ChangeNotifierProvider(create: (_) => FeedHelpers()),
+          ChangeNotifierProvider(create: (_) => UploadPost()),
           ChangeNotifierProvider(create: (_) => Authentication()),
           ChangeNotifierProvider(create: (_) => LandingHelpers()),
           ChangeNotifierProvider(create: (_) => LandingService())
