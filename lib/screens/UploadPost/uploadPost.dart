@@ -250,19 +250,20 @@ class UploadPost with ChangeNotifier {
                   fontSize: 18.0),
                 ),
 
-              onPressed: () async{
-                Provider.of<FirebaseOperations>(context,listen:false).
-                uploadPostData(captionController.text,{
-                    'caption':captionController.text,
-                'username':Provider.of<FirebaseOperations>(context,listen:false).getInitUserName,
-                'userImage':Provider.of<FirebaseOperations>(context,listen:false).getInitUserImage,
-               'useruid':Provider.of<Authentication>(context,listen:false).getUserUid,
-                'time':Timestramp.now(),
-    'useremail':Provider.of<FirebaseOperations>(context,listen:false).getInitUserEmail,
-      }).whenComplete((){
-            Navigator.pop(context);
-                }
-    );
+              onPressed: (){
+    //           async{
+    //             Provider.of<FirebaseOperations>(context,listen:false).
+    //             uploadPostData(captionController.text,{
+    //                 'caption':captionController.text,
+    //             'username':Provider.of<FirebaseOperations>(context,listen:false).getInitUserName,
+    //             'userImage':Provider.of<FirebaseOperations>(context,listen:false).getInitUserImage,
+    //            'useruid':Provider.of<Authentication>(context,listen:false).getUserUid,
+    //             'time':Timestramp.now(),
+    // 'useremail':Provider.of<FirebaseOperations>(context,listen:false).getInitUserEmail,
+    //   }).whenComplete((){
+    //         Navigator.pop(context);
+    //             }
+    // );
               },
     ),
             FloatingActionButton(onPressed: () {  },
