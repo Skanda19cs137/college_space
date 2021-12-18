@@ -31,7 +31,7 @@ class LandingService with ChangeNotifier {
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundImage:
-                          NetworkImage((documentSnapshot.data() as dynamic)!['userimage']),
+                      NetworkImage((documentSnapshot.data() as dynamic)!['userimage']),
                     ),
                     title: Text(
                       (documentSnapshot.data() as dynamic)!['username'],
@@ -183,9 +183,9 @@ class LandingService with ChangeNotifier {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: constantColors.darkColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12.0),
-                      topRight: Radius.circular(12.0)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0)),
               ),
               child: Column(
                 children: [
@@ -203,21 +203,21 @@ class LandingService with ChangeNotifier {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child:TextField(
-                        controller: userNameController,
-                        decoration: InputDecoration(
-                          hintText: 'Enter name ... ',
-                          hintStyle: TextStyle(
+                      controller: userNameController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter name ... ',
+                        hintStyle: TextStyle(
                             color:  constantColors.whiteColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0
-                          ),
                         ),
-                        style:TextStyle(
-                            color:  constantColors.whiteColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0
-                        ) ,
                       ),
+                      style:TextStyle(
+                          color:  constantColors.whiteColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                      ) ,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -260,20 +260,20 @@ class LandingService with ChangeNotifier {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: FloatingActionButton(
-                      backgroundColor: constantColors.redColor,
+                        backgroundColor: constantColors.redColor,
                         child: Icon(FontAwesomeIcons.check , color: constantColors.whiteColor,),
                         onPressed: (){
-                         if (userEmailController.text.isNotEmpty) {
-                           Provider.of<Authentication>(context,listen:false).createAccount(userEmailController.text, userPasswordController.text)
-                               .whenComplete((){
-                             Navigator.pushReplacement(context, PageTransition(
-                                 child: Homepage(),
-                                 type: PageTransitionType.bottomToTop));
-                           });
-                         }
-                         else{
-                           warningText(context, 'Fill all the details');
-                         }
+                          if (userEmailController.text.isNotEmpty) {
+                            Provider.of<Authentication>(context,listen:false).createAccount(userEmailController.text, userPasswordController.text)
+                                .whenComplete((){
+                              Navigator.pushReplacement(context, PageTransition(
+                                  child: Homepage(),
+                                  type: PageTransitionType.bottomToTop));
+                            });
+                          }
+                          else{
+                            warningText(context, 'Fill all the details');
+                          }
                         }),
                   ),
                 ],
@@ -289,14 +289,14 @@ class LandingService with ChangeNotifier {
         builder: (context){
           return Container(
             decoration: BoxDecoration(
-              color: constantColors.darkColor,
-              borderRadius: BorderRadius.circular(15.0)
+                color: constantColors.darkColor,
+                borderRadius: BorderRadius.circular(15.0)
             ),
             height: MediaQuery.of(context).size.height*0.12 ,
             width: MediaQuery.of(context).size.width,
             child: Center(
               child: Text(warning,
-              style: TextStyle(color: constantColors.whiteColor, fontSize: 16.0, fontWeight: FontWeight.bold),
+                style: TextStyle(color: constantColors.whiteColor, fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
             ),
           );
