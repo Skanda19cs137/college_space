@@ -9,7 +9,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 ConstantColors constantColors = ConstantColors();
 class ProfileHelpers with ChangeNotifier{
 
-  Widget headerProfile(BuildContext context,DocumentSnapshot snapshot){
+
+
+  Widget headerProfile(BuildContext context,dynamic snapshot){
     return SizedBox(
         height: MediaQuery.of(context).size.height * 0.25,
         width: MediaQuery.of(context).size.width,
@@ -27,8 +29,7 @@ class ProfileHelpers with ChangeNotifier{
                         child: CircleAvatar(
                           backgroundColor: constantColors.transperant,
                           radius: 60.0,
-                          backgroundImage:
-                          NetworkImage( snapshot.data.data()['userimage'])
+                          backgroundImage:NetworkImage( snapshot.data.data()['userimage'])
                         )
                     ),
                     Padding(
@@ -198,4 +199,6 @@ Widget footerProfile(BuildContext context,dynamic snapshot){
       )
     );
 }
+
+  void logOutDialog(BuildContext context) {}
 }
