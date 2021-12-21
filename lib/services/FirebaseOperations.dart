@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
-import 'dart:js';
+import 'package:js/js.dart';
+import 'package:universal_html/html.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_space/screens/LandingPage/LandingUtil.dart';
 import 'package:college_space/services/Authentication.dart';
@@ -44,6 +45,10 @@ class FirebaseOperations with ChangeNotifier {
     return FirebaseFirestore.instance.collection('post').doc(
         postId
     ).set(data);
+  }
+
+  Future submitChatroomData( String chatroomName , dynamic chatroomData) async{
+    return FirebaseFirestore.instance.collection('chatrooms').doc(chatroomName).set(chatroomData);
   }
 }
 
