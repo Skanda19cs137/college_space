@@ -46,6 +46,7 @@ dependencies:
   image_picker: ^0.8.4+4
   http:
   universal_html: ^2.0.8
+  lottie: ^1.2.1
 
 
 dev_dependencies:
@@ -72,6 +73,7 @@ flutter:
   assets:
     - assets/images/login.png
     - assets/images/empty.png
+    - assets/animations/loading.json
   fonts:
     - family: Poppins
       fonts:
