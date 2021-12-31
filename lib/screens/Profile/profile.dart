@@ -15,6 +15,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: constantColors.blueGreyColor.withOpacity(0.4),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(
@@ -30,7 +31,6 @@ class Profile extends StatelessWidget {
               Provider.of<ProfileHelpers>(context,listen:false).logOutDialog(context);
             },)
         ],
-          backgroundColor: constantColors.blueGreyColor.withOpacity(0.4),
           title: RichText(
             text: TextSpan(
                 text: 'My',

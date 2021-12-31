@@ -5,8 +5,6 @@ import 'package:college_space/constants/Constantcolors.dart';
 import 'package:flutter/material.dart';
 
 class Splashscreen extends StatefulWidget {
-  const Splashscreen({Key? key}) : super(key: key);
-
   @override
   _SplashscreenState createState() => _SplashscreenState();
 }

@@ -1,5 +1,8 @@
+import 'package:college_space/screens/LandingPage/landingPage.dart';
+import 'package:college_space/services/Authentication.dart';
 import 'package:js/js.dart';
-import 'package:universal_html/html.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_space/constants/Constantcolors.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -28,15 +31,16 @@ class ProfileHelpers with ChangeNotifier {
                       child: CircleAvatar(
                           backgroundColor: constantColors.transperant,
                           radius: 60.0,
-                          backgroundImage:
-                              NetworkImage(snapshot.data.data()['userimage']))),
+                          backgroundImage:(snapshot.data.data()['userimage']!=null)?
+                              NetworkImage(snapshot.data.data()['userimage']):AssetImage('assets/images/empty.png')
+                      )),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(snapshot.data.data()['username'],
                         style: TextStyle(
                             color: constantColors.whiteColor,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16.0)),
+                            fontSize: 18.0)),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -47,7 +51,7 @@ class ProfileHelpers with ChangeNotifier {
                             color: constantColors.greenColor, size: 16.0),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),
-                          child: Text(snapshot.data.data()['username'],
+                          child: Text(snapshot.data.data()['useremail'],
                               style: TextStyle(
                                   color: constantColors.whiteColor,
                                   fontWeight: FontWeight.bold,
@@ -75,7 +79,7 @@ class ProfileHelpers with ChangeNotifier {
                           width: 80.0,
                           child: Column(
                             children: [
-                              Text('0',
+                              Text('0', //no of followers
                                   style: TextStyle(
                                       color: constantColors.whiteColor,
                                       fontWeight: FontWeight.bold,
@@ -204,5 +208,55 @@ class ProfileHelpers with ChangeNotifier {
         ));
   }
 
-  void logOutDialog(BuildContext context) {}
+  logOutDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: constantColors.darkColor,
+            title: Text(
+              'Log Out',
+              style: TextStyle(
+                  color: constantColors.whiteColor,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold),
+            ),
+            actions: [
+              MaterialButton(
+                  child: Text(
+                    'No',
+                    style: TextStyle(
+                        color: constantColors.whiteColor,
+                        decoration: TextDecoration.underline,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              MaterialButton(
+                  color: constantColors.redColor,
+                  child: Text(
+                    'Yes',
+                    style: TextStyle(
+                        color: constantColors.whiteColor,
+                        decoration: TextDecoration.underline,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    Provider.of<Authentication>(context, listen: false)
+                        .logOutViaEmail()
+                        .whenComplete(() {
+                          Navigator.pushReplacement(context,
+                            PageTransition(
+                                child: Landingpage(),
+                                type: PageTransitionType.rotate)
+                          );
+                    });
+                  })
+            ],
+          );
+        });
+  }
 }

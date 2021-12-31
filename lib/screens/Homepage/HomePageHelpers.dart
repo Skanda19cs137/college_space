@@ -1,12 +1,14 @@
 import 'package:college_space/constants/Constantcolors.dart';
+import 'package:college_space/services/FirebaseOperations.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomepageHelpers with ChangeNotifier {
   ConstantColors constantColors = ConstantColors();
-  Widget bottomNavBar(int index, PageController pageController) {
+  Widget bottomNavBar(BuildContext context, int index, PageController pageController) {
     return CustomNavigationBar(
         currentIndex: index,
         bubbleCurve: Curves.bounceIn,
@@ -29,7 +31,8 @@ class HomepageHelpers with ChangeNotifier {
               icon: CircleAvatar(
             radius: 35.0,
             backgroundColor: constantColors.blueGreyColor,
-            //backgroundImage: ,
+            backgroundImage: (Provider.of<FirebaseOperations>(context, listen:false).getInitUserImage != null)?
+            NetworkImage(Provider.of<FirebaseOperations>(context, listen:false).getInitUserImage):AssetImage('assets/images/empty.png'),
           )),
         ]);
   }

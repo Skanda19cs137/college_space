@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class landingUtils with ChangeNotifier {
+class LandingUtils with ChangeNotifier {
   ConstantColors constantColors = ConstantColors();
   final picker = ImagePicker();
-  late File userAvatar;
+  File userAvatar;
   File get getUserAvatar => userAvatar;
-  late String userAvatarUrl;
+  String userAvatarUrl;
   String get getUserAvatarUrl => userAvatarUrl;
 
   Future pickUserAvatar(BuildContext context, ImageSource source) async {
-    final pickedUserAvatar = await picker.getImage(source: source);
+    final pickedUserAvatar = await picker.pickImage(source: source);
     pickedUserAvatar == null
         ? print('Select image')
         : userAvatar = File(pickedUserAvatar.path);

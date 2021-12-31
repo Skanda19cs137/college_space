@@ -10,28 +10,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FirebaseOperations with ChangeNotifier {
-  late UploadTask imageUploadTask;
-
+  UploadTask imageUploadTask;
+  String initUserEmail;
   get getInitUserName => null;
-
+  String initUserName;
   get getInitUserEmail => null;
-
+  String initUserImage;
   get getInitUserImage => null;
 
   Future uploadUserAvatar(BuildContext context) async {
     Reference imageReference = FirebaseStorage.instance.ref().child(
-        'userProfileAvatar/${Provider.of<landingUtils>(context, listen: false).getUserAvatar.path}/${TimeOfDay.now()}');
+        'userProfileAvatar/${Provider.of<LandingUtils>(context, listen: false).getUserAvatar.path}/${TimeOfDay.now()}');
     imageUploadTask = imageReference.putFile(
-        Provider.of<landingUtils>(context, listen: false).getUserAvatar);
+        Provider.of<LandingUtils>(context, listen: false).getUserAvatar);
     await imageUploadTask.whenComplete(() {
       print('Image Uploaded!');
     });
 
     imageReference.getDownloadURL().then((url) {
-      Provider.of<landingUtils>(context, listen: false).userAvatarUrl =
+      Provider.of<LandingUtils>(context, listen: false).userAvatarUrl =
           url.toString();
       print(
-          'The User Profile avatar url =>${Provider.of<landingUtils>(context, listen: false).userAvatarUrl = url.toString()}');
+          'The User Profile avatar url =>${Provider.of<LandingUtils>(context, listen: false).userAvatarUrl = url.toString()}');
       notifyListeners();
     });
   }
@@ -41,6 +41,19 @@ class FirebaseOperations with ChangeNotifier {
         .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
         .set(data);
   }
+
+  Future initUserData (BuildContext context) async{
+    return FirebaseFirestore.instance.collection('user').doc(
+      Provider.of<Authentication>(context,listen: false).getUserUid
+    ).get().then((doc){
+      print("Fetching user data");
+      initUserName= doc.data()['username'];
+      initUserName= doc.data()['useremail'];
+      initUserName= doc.data()['userimage'];
+      notifyListeners();
+    });
+  }
+
   Future uploadPostData(String postId,dynamic data)async{
     return FirebaseFirestore.instance.collection('post').doc(
         postId

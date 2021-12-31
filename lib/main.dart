@@ -5,6 +5,7 @@ import 'package:college_space/screens/Homepage/HomePageHelpers.dart';
 import 'package:college_space/screens/LandingPage/LandingUtil.dart';
 import 'package:college_space/screens/LandingPage/landingHelpers.dart';
 import 'package:college_space/screens/LandingPage/landingServices.dart';
+import 'package:college_space/screens/Profile/ProfileHelpers.dart';
 import 'package:college_space/screens/Splashscreen/splashScreen.dart';
 import 'package:college_space/screens/UploadPost/uploadPost.dart';
 import 'package:college_space/services/Authentication.dart';
@@ -35,14 +36,16 @@ class MyApp extends StatelessWidget {
         ),
         providers: [
           ChangeNotifierProvider(create: (_) => HomepageHelpers()),
-          ChangeNotifierProvider(create: (_) => landingUtils()),
+          ChangeNotifierProvider(create: (_) => LandingUtils()),
           ChangeNotifierProvider(create: (_) => FirebaseOperations()),
           ChangeNotifierProvider(create: (_) => Authentication()),
           ChangeNotifierProvider(create: (_) => FeedHelpers()),
+          ChangeNotifierProvider(create: (_) => ProfileHelpers()),
           ChangeNotifierProvider(create: (_) => UploadPost()),
           ChangeNotifierProvider(create: (_) => Authentication()),
           ChangeNotifierProvider(create: (_) => LandingHelpers()),
           ChangeNotifierProvider(create: (_) => LandingService()),
+          ChangeNotifierProvider(create: (_) => ChatroomHelper())
         ]
     );
 

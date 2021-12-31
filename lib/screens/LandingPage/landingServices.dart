@@ -38,7 +38,7 @@ class LandingService with ChangeNotifier {
                   radius: 80.0,
                   backgroundColor: constantColors.transperant,
                   backgroundImage: FileImage(
-                      Provider.of<landingUtils>(context, listen: false)
+                      Provider.of<LandingUtils>(context, listen: false)
                           .userAvatar),
                 ),
                 Container(
@@ -53,7 +53,7 @@ class LandingService with ChangeNotifier {
                                   decoration: TextDecoration.underline,
                                   decorationColor: constantColors.whiteColor)),
                           onPressed: () {
-                            Provider.of<landingUtils>(context, listen: false)
+                            Provider.of<LandingUtils>(context, listen: false)
                                 .pickUserAvatar(context, ImageSource.gallery);
                           }),
                       MaterialButton(
@@ -97,22 +97,22 @@ class LandingService with ChangeNotifier {
               );
             } else {
               return ListView(
-                children: snapshot.data!.docs
+                children: snapshot.data.docs
                     .map((DocumentSnapshot documentSnapshot) {
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundColor: constantColors.transperant,
-                      backgroundImage: NetworkImage(
-                          (documentSnapshot.data() as dynamic)!['userimage']),
+                      backgroundImage: ((documentSnapshot.data() as dynamic)['userimage'] !=null)?
+                      NetworkImage((documentSnapshot.data() as dynamic)['userimage']): AssetImage('assets/images/empty.png'),
                     ),
                     title: Text(
-                      (documentSnapshot.data() as dynamic)!['username'],
+                      (documentSnapshot.data() as dynamic)['username'],
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.greenAccent),
                     ),
                     subtitle: Text(
-                      (documentSnapshot.data() as dynamic)!['useremail'],
+                      (documentSnapshot.data() as dynamic)['useremail'],
                       style: TextStyle(
                           fontSize: 12.0,
                           fontWeight: FontWeight.bold,
@@ -157,23 +157,6 @@ class LandingService with ChangeNotifier {
                     child: Divider(
                       thickness: 4.0,
                       color: constantColors.whiteColor,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: TextField(
-                      controller: userNameController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter name ... ',
-                        hintStyle: TextStyle(
-                            color: constantColors.whiteColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
-                      ),
-                      style: TextStyle(
-                          color: constantColors.whiteColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0),
                     ),
                   ),
                   Padding(
@@ -267,7 +250,7 @@ class LandingService with ChangeNotifier {
                   ),
                   CircleAvatar(
                     backgroundImage: FileImage(
-                        Provider.of<landingUtils>(context, listen: false)
+                        Provider.of<LandingUtils>(context, listen: false)
                             .getUserAvatar),
                     backgroundColor: constantColors.greyColor,
                     radius: 60.0,
@@ -336,21 +319,21 @@ class LandingService with ChangeNotifier {
                             Provider.of<Authentication>(context, listen: false)
                                 .createAccount(userEmailController.text,
                                     userPasswordController.text)
-                                //     .whenComplete(() {
-                                //   print('Creating collection...');
-                                //   Provider.of<FirebaseOperations>(context,
-                                //           listen: false)
-                                //       .createUserCollection(context, {
-                                //     'useruid': Provider.of<Authentication>(context,
-                                //             listen: false)
-                                //         .getUserUid,
-                                //     'useremail': userEmailController.text,
-                                //     'username': userNameController.text,
-                                //     'userImage': Provider.of<landingUtils>(context,
-                                //             listen: false)
-                                //         .getUserAvatarUrl,
-                                //   });
-                                // })
+                                     .whenComplete(() {
+                                   print('Creating collection...');
+                                   Provider.of<FirebaseOperations>(context,
+                                           listen: false)
+                                       .createUserCollection(context, {
+                                     'useruid': Provider.of<Authentication>(context,
+                                             listen: false)
+                                         .getUserUid,
+                                     'useremail': userEmailController.text,
+                                     'username': userNameController.text,
+                                     'userImage': Provider.of<LandingUtils>(context,
+                                             listen: false)
+                                         .getUserAvatarUrl,
+                                   });
+                                 })
                                 .whenComplete(() {
                               Navigator.pushReplacement(
                                   context,

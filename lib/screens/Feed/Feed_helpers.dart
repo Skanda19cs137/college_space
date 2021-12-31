@@ -69,7 +69,7 @@ class FeedHelpers with ChangeNotifier {
               }
             },
           ),
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).size.height*0.9,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               color: constantColors.darkColor,
@@ -84,7 +84,7 @@ class FeedHelpers with ChangeNotifier {
   Widget loadPosts(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
     return ListView(
-      children: snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
+      children: snapshot.data.docs.map((DocumentSnapshot documentSnapshot) {
         return Container(
           height: MediaQuery.of(context).size.height * 0.7,
           width: MediaQuery.of(context).size.width,
@@ -93,15 +93,15 @@ class FeedHelpers with ChangeNotifier {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top:8.0,left:8.0 ),
+                padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                 child: Row(
                   children: [
                     GestureDetector(
                       child: CircleAvatar(
                         backgroundColor: constantColors.transperant,
                         radius: 20.0,
-                        backgroundImage:
-                            NetworkImage(documentSnapshot.data()!['userimage']),
+                        backgroundImage:((documentSnapshot.data() as dynamic)['userimage'] != null)? 
+                            NetworkImage((documentSnapshot.data() as dynamic)['userimage']) : AssetImage('assets/images/empty.png'),
                       ),
                     ),
                     Padding(
@@ -113,32 +113,27 @@ class FeedHelpers with ChangeNotifier {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              child: Text(documentSnapshot.data()!['caption'],
+                              child: Text((documentSnapshot.data() as dynamic)['caption'],
                                   style: TextStyle(
                                       color: constantColors.greenColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.0)),
                             ),
                             Container(
-                              child: RichText(
-                                text: TextSpan(
-                                  text: documentSnapshot.data()!['username'],
+                                child: RichText(
+                              text: TextSpan(
+                                  text: (documentSnapshot.data() as dynamic)['username'],
                                   style: TextStyle(
-                                    color: constantColors.blueColor,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold
-                                  ),
+                                      color: constantColors.blueColor,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.bold),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: '12 hrs ago',
-                                      style: TextStyle(
-                                        color: constantColors.lightColor
-                                      )
-                                    )
-                                  ]
-                                ),
-                              )
-                            )
+                                        text: '12 hrs ago',
+                                        style: TextStyle(
+                                            color: constantColors.lightColor))
+                                  ]),
+                            ))
                           ],
                         ),
                       ),
@@ -149,10 +144,11 @@ class FeedHelpers with ChangeNotifier {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Container(
-                  height: MediaQuery.of(context).size.height*0.5,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   width: MediaQuery.of(context).size.width,
                   child: FittedBox(
-                    child: Image.network(documentSnapshot.data()!['postimage'],scale: 2),
+                    child:((documentSnapshot.data() as dynamic)['postimage'] != null)? Image.network((documentSnapshot.data() as dynamic)['postimage'],
+                        scale: 2):AssetImage('assets/images/empty.png'),
                   ),
                 ),
               ),
@@ -169,17 +165,20 @@ class FeedHelpers with ChangeNotifier {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              child: Icon(FontAwesomeIcons.heart,color: constantColors.redColor,size: 22,),
+                              child: Icon(
+                                FontAwesomeIcons.heart,
+                                color: constantColors.redColor,
+                                size: 22,
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
                                 '0',
                                 style: TextStyle(
-                                  color: constantColors.whiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18.0
-                                ),
+                                    color: constantColors.whiteColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0),
                               ),
                             )
                           ],
@@ -191,7 +190,11 @@ class FeedHelpers with ChangeNotifier {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              child: Icon(FontAwesomeIcons.comment,color: constantColors.greenColor,size: 22,),
+                              child: Icon(
+                                FontAwesomeIcons.comment,
+                                color: constantColors.greenColor,
+                                size: 22,
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
@@ -200,8 +203,7 @@ class FeedHelpers with ChangeNotifier {
                                 style: TextStyle(
                                     color: constantColors.whiteColor,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18.0
-                                ),
+                                    fontSize: 18.0),
                               ),
                             )
                           ],
@@ -212,33 +214,44 @@ class FeedHelpers with ChangeNotifier {
                         child: Row(
                           children: [
                             GestureDetector(
-                              child: Icon(FontAwesomeIcons.award,color: constantColors.yellowColor,size: 22,),
+                              child: Icon(
+                                FontAwesomeIcons.award,
+                                color: constantColors.yellowColor,
+                                size: 22,
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
-                              child: Text('0',
+                              child: Text(
+                                '0',
                                 style: TextStyle(
                                     color: constantColors.whiteColor,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18.0
-                                ),
+                                    fontSize: 18.0),
                               ),
                             )
                           ],
                         ),
                       ),
-                    Spacer(),
-                    Provider.of<Authentication>(context,listen: false).getUserUid == documentSnapshot.data().['useruid'] ?
-                      IconButton(icon: Icon(EvaIcons.moreVertical, color: constantColors.whiteColor, onPressed:(){} )) :
-                      Container(
-                        width: 0.0,
-                        height: 0.0,
-                      ),
+                      Spacer(),
+                      Provider.of<Authentication>(context, listen: false)
+                                  .getUserUid ==
+                              (documentSnapshot.data() as dynamic)['useruid']
+                          ? IconButton(
+                              icon: Icon(
+                                EvaIcons.moreVertical,
+                                color: constantColors.whiteColor,
+                              ),
+                              onPressed: () {},
+                            )
+                          : Container(
+                              width: 0.0,
+                              height: 0.0,
+                            ),
                     ],
                   ),
                 ),
               ),
-
             ],
           ),
         );

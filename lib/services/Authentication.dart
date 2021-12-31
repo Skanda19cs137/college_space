@@ -7,21 +7,21 @@ class Authentication with ChangeNotifier
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  late String userUid;
+  String userUid;
   String get getUserUid => userUid;
 
   Future logIntoAccount(String email, String password) async{
     UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-    User? user= userCredential.user;
-    userUid= user!.uid;
+    User user= userCredential.user;
+    userUid= user.uid;
     print(userUid);
     notifyListeners();
   }
 
   Future createAccount(String email, String password) async{
     UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-    User? user= userCredential.user;
-    userUid= user!.uid;
+    User user= userCredential.user;
+    userUid= user.uid;
     print(userUid);
     notifyListeners();
   }
@@ -33,17 +33,17 @@ class Authentication with ChangeNotifier
 
   Future signInWithGoogle() async{
 
-    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
     final AuthCredential authCredential =  GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken
     );
     final UserCredential userCredential = await firebaseAuth.signInWithCredential(authCredential);
-    final User? user = userCredential.user;
-    assert(user!.uid != null);
+    final User user = userCredential.user;
+    assert(user.uid != null);
 
-    userUid = user!.uid;
+    userUid = user.uid;
     print("Google user UID => $userUid");
     notifyListeners();
   }
