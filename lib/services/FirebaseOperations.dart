@@ -37,31 +37,38 @@ class FirebaseOperations with ChangeNotifier {
   }
 
   Future createUserCollection(BuildContext context, dynamic data) async {
-    return FirebaseFirestore.instance.collection('users')
+    return FirebaseFirestore.instance
+        .collection('users')
         .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
         .set(data);
   }
 
-  Future initUserData (BuildContext context) async{
-    return FirebaseFirestore.instance.collection('user').doc(
-      Provider.of<Authentication>(context,listen: false).getUserUid
-    ).get().then((doc){
+  Future initUserData(BuildContext context) async {
+    return FirebaseFirestore.instance
+        .collection('user')
+        .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
+        .get()
+        .then((doc) {
       print("Fetching user data");
-      initUserName= doc.data()['username'];
-      initUserName= doc.data()['useremail'];
-      initUserName= doc.data()['userimage'];
+      initUserName = doc.data()['username'];
+      initUserName = doc.data()['useremail'];
+      initUserName = doc.data()['userimage'];
       notifyListeners();
     });
   }
 
-  Future uploadPostData(String postId,dynamic data)async{
-    return FirebaseFirestore.instance.collection('post').doc(
-        postId
-    ).set(data);
+  Future uploadPostData(String postId, dynamic data) async {
+    return FirebaseFirestore.instance.collection('post').doc(postId).set(data);
   }
 
-  Future submitChatroomData( String chatroomName , dynamic chatroomData) async{
-    return FirebaseFirestore.instance.collection('chatrooms').doc(chatroomName).set(chatroomData);
+  Future submitChatroomData(String chatroomName, dynamic chatroomData) async {
+    return FirebaseFirestore.instance
+        .collection('chatrooms')
+        .doc(chatroomName)
+        .set(chatroomData);
+  }
+
+  Future deleteUserData(String userUid) async {
+    return FirebaseFirestore.instance.collection('users').doc(userUid).delete();
   }
 }
-
