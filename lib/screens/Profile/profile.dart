@@ -94,4 +94,23 @@ class Profile extends StatelessWidget {
       ),
     ); // Scaffold
   }
+  logOutDialog(BuildContext context){
+    return showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text('Log Out of the Soical?',style: TextStyle(
+       color: constantColors.whiteColor,
+       fontSize: 16.0,
+       fontWeight: FontWeight.bold
+        ),),
+        actions: [
+          MaterialButton(
+              child: Text('No',style: TextStyle(
+                color:constantColors.whiteColor,
+                decoration: TextDecoration.underline
+              )),
+              onPressed: )
+        ],
+      );
+    });
+  }
 }

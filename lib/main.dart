@@ -1,9 +1,9 @@
 import 'package:college_space/constants/Constantcolors.dart';
 import 'package:college_space/screens/Feed/Feed_helpers.dart';
 import 'package:college_space/screens/Homepage/HomePageHelpers.dart';
+import 'package:college_space/screens/LandingPage/LandingUtil.dart';
 import 'package:college_space/screens/LandingPage/landingHelpers.dart';
 import 'package:college_space/screens/LandingPage/landingServices.dart';
-import 'package:college_space/screens/LandingPage/landingUtils.dart';
 import 'package:college_space/screens/Splashscreen/splashScreen.dart';
 import 'package:college_space/screens/UploadPost/uploadPost.dart';
 import 'package:college_space/services/Authentication.dart';

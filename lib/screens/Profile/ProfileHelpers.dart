@@ -190,7 +190,7 @@ Widget footerProfile(BuildContext context,dynamic snapshot){
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        child: Image.asset(name),
+        child: Image.asset('assets/images/empty.png'),
         height: MediaQuery.of(context).size.height * 0.53,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
