@@ -1,5 +1,6 @@
 import 'package:college_space/constants/Constantcolors.dart';
 import 'package:college_space/screens/Homepage/Homepage.dart';
+import 'package:college_space/screens/LandingPage/LandingUtil.dart';
 import 'package:college_space/screens/LandingPage/landingServices.dart';
 import 'package:college_space/services/Authentication.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -140,7 +141,7 @@ class LandingHelpers with ChangeNotifier {
                               fontWeight: FontWeight.bold),
                         ),
                         onPressed: () {
-                          Provider.of<LandingService>(context,listen: false).signUpSheet(context);
+                          Provider.of<LandingUtils>(context,listen: false).selectAvatarOptionsSheet(context);
                         }),
                   ],
                 )
