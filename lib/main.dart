@@ -10,6 +10,7 @@ import 'package:college_space/screens/Splashscreen/splashScreen.dart';
 import 'package:college_space/screens/UploadPost/uploadPost.dart';
 import 'package:college_space/services/Authentication.dart';
 import 'package:college_space/services/FirebaseOperations.dart';
+import 'package:college_space/utils/PostOptions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   @override
-  Widget build( BuildContext context){
+  Widget build(BuildContext context) {
     ConstantColors constantColors = ConstantColors();
     return MultiProvider(
         child: MaterialApp(
@@ -31,10 +32,10 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               accentColor: constantColors.blueColor,
               fontFamily: 'Poppins',
-              canvasColor: Colors.transparent
-          ),
+              canvasColor: Colors.transparent),
         ),
         providers: [
+          ChangeNotifierProvider(create: (_) => PostFunctions()),
           ChangeNotifierProvider(create: (_) => HomepageHelpers()),
           ChangeNotifierProvider(create: (_) => LandingUtils()),
           ChangeNotifierProvider(create: (_) => FirebaseOperations()),
@@ -46,8 +47,6 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => LandingHelpers()),
           ChangeNotifierProvider(create: (_) => LandingService()),
           ChangeNotifierProvider(create: (_) => ChatroomHelper())
-        ]
-    );
-
+        ]);
   }
 }
