@@ -103,8 +103,9 @@ class PostFunctions with ChangeNotifier {
                                   children: snapshot.data.docs
                                       .map((DocumentSnapshot documentSnapshot) {
                                 return Container(
+                                  /* color: constantColors.redColor,*/
                                   height:
-                                      MediaQuery.of(context).size.height * 0.11,
+                                      MediaQuery.of(context).size.height * 0.15,
                                   width: MediaQuery.of(context).size.width,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -113,38 +114,45 @@ class PostFunctions with ChangeNotifier {
                                     children: [
                                       Row(
                                         children: [
-                                          GestureDetector(
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  constantColors.blueGreyColor,
-                                              radius: 15.0,
-                                              backgroundImage: NetworkImage(
-                                                  (documentSnapshot.data()
-                                                      as dynamic)['userimage']),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: GestureDetector(
+                                              child: CircleAvatar(
+                                                backgroundColor: constantColors
+                                                    .blueGreyColor,
+                                                radius: 15.0,
+                                                backgroundImage: NetworkImage(
+                                                    (documentSnapshot.data()
+                                                            as dynamic)[
+                                                        'userimage']),
+                                              ),
                                             ),
                                           ),
-                                          Column(
-                                            children: [
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Text((documentSnapshot
-                                                            .data() as dynamic)[
-                                                        'username']),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: Container(
+                                                child: Text(
+                                              (documentSnapshot.data()
+                                                  as dynamic)['username'],
+                                              style: TextStyle(
+                                                  color:
+                                                      constantColors.whiteColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18.0),
+                                            )),
                                           ),
                                           Container(
                                             child: Row(
                                               children: [
                                                 IconButton(
                                                     icon: Icon(
-                                                        FontAwesomeIcons
-                                                            .arrowUp,
-                                                        color: constantColors
-                                                            .blueColor),
+                                                      FontAwesomeIcons.arrowUp,
+                                                      color: constantColors
+                                                          .blueColor,
+                                                      size: 14.0,
+                                                    ),
                                                     onPressed: () {}),
                                                 Text(
                                                   '0',
@@ -159,14 +167,8 @@ class PostFunctions with ChangeNotifier {
                                                     icon: Icon(
                                                         FontAwesomeIcons.reply,
                                                         color: constantColors
-                                                            .yellowColor),
-                                                    onPressed: () {}),
-                                                IconButton(
-                                                    icon: Icon(
-                                                        FontAwesomeIcons
-                                                            .trashAlt,
-                                                        color: constantColors
-                                                            .redColor),
+                                                            .yellowColor,
+                                                        size: 12),
                                                     onPressed: () {}),
                                               ],
                                             ),
@@ -174,6 +176,8 @@ class PostFunctions with ChangeNotifier {
                                         ],
                                       ),
                                       Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         child: Row(
                                           children: [
                                             IconButton(
@@ -187,8 +191,9 @@ class PostFunctions with ChangeNotifier {
                                                 onPressed: () {}),
                                             Container(
                                               width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
+                                                      .size
+                                                      .width *
+                                                  0.75,
                                               child: Text(
                                                 (documentSnapshot.data()
                                                     as dynamic)['comment'],
@@ -197,13 +202,17 @@ class PostFunctions with ChangeNotifier {
                                                         .whiteColor,
                                                     fontSize: 16.0),
                                               ),
-                                            )
+                                            ),
+                                            IconButton(
+                                                icon: Icon(
+                                                    FontAwesomeIcons.trashAlt,
+                                                    color:
+                                                        constantColors.redColor,
+                                                    size: 16),
+                                                onPressed: () {}),
                                           ],
                                         ),
                                       ),
-                                      Divider(
-                                          color: constantColors.darkColor
-                                              .withOpacity(0.2)),
                                     ],
                                   ),
                                 );
@@ -248,9 +257,13 @@ class PostFunctions with ChangeNotifier {
                               onPressed: () {
                                 print('Adding Comment....');
                                 addComment(
-                                    context,
-                                    (snapshot.data() as dynamic)['caption'],
-                                    commentController.text);
+                                        context,
+                                        (snapshot.data() as dynamic)['caption'],
+                                        commentController.text)
+                                    .whenComplete(() {
+                                  commentController.clear();
+                                  notifyListeners();
+                                });
                               })
                         ],
                       ),
@@ -330,15 +343,25 @@ class PostFunctions with ChangeNotifier {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12.0),
                             ),
-                            trailing: MaterialButton(
-                              child: Text('Follow',
-                                  style: TextStyle(
-                                      color: constantColors.whiteColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14.0)),
-                              onPressed: () {},
-                              color: constantColors.blueColor,
-                            ),
+                            trailing: Provider.of<Authentication>(context,
+                                            listen: false)
+                                        .getUserUid ==
+                                    (documentSnapshot.data()
+                                        as dynamic)['useruid']
+                                ? Container(
+                                    width: 0.0,
+                                    height: 0.0,
+                                  )
+                                : MaterialButton(
+                                    child: Text(
+                                      'Follow',
+                                      style: TextStyle(
+                                          color: constantColors.whiteColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14.0),
+                                    ),
+                                    onPressed: () {},
+                                    color: constantColors.blueColor),
                           );
                         }).toList());
                       }
