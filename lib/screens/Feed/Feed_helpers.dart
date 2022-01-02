@@ -177,22 +177,49 @@ class FeedHelpers with ChangeNotifier {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
+                              onTap: () {
+                                print('Adding like....');
+                                Provider.of<PostFunctions>(context,
+                                        listen: false)
+                                    .addLike(
+                                        context,
+                                        (documentSnapshot.data()
+                                            as dynamic)['caption'],
+                                        Provider.of<Authentication>(context,
+                                                listen: false)
+                                            .getUserUid);
+                              },
                               child: Icon(
                                 FontAwesomeIcons.heart,
                                 color: constantColors.redColor,
                                 size: 22,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                '0',
-                                style: TextStyle(
-                                    color: constantColors.whiteColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0),
-                              ),
-                            )
+                            StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('posts')
+                                    .doc((documentSnapshot.data()
+                                        as dynamic)['caption'])
+                                    .collection('likes')
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                          snapshot.data.docs.length.toString(),
+                                          style: TextStyle(
+                                              color: constantColors.whiteColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18.0)),
+                                    );
+                                  }
+                                })
                           ],
                         ),
                       ),
