@@ -265,4 +265,97 @@ class PostFunctions with ChangeNotifier {
           );
         });
   }
+
+  showLikes(BuildContext context, String postId) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 150.0),
+                  child: Divider(
+                    thickness: 4.0,
+                    color: constantColors.whiteColor,
+                  ),
+                ),
+                Container(
+                  width: 100.0,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: constantColors.whiteColor),
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: Center(
+                    child: Text('Likes',
+                        style: TextStyle(
+                            color: constantColors.blueColor,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  width: MediaQuery.of(context).size.width,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('posts')
+                        .doc(postId)
+                        .collection('likes')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else {
+                        return new ListView(
+                            children: snapshot.data.docs
+                                .map((DocumentSnapshot documentSnapshot) {
+                          return ListTile(
+                            leading: GestureDetector(
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage((documentSnapshot
+                                    .data() as dynamic)['userimage']),
+                              ),
+                            ),
+                            title: Text(
+                              (documentSnapshot.data() as dynamic)['username'],
+                              style: TextStyle(
+                                  color: constantColors.blueColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0),
+                            ),
+                            subtitle: Text(
+                              (documentSnapshot.data() as dynamic)['useremail'],
+                              style: TextStyle(
+                                  color: constantColors.whiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.0),
+                            ),
+                            trailing: MaterialButton(
+                              child: Text('Follow',
+                                  style: TextStyle(
+                                      color: constantColors.whiteColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.0)),
+                              onPressed: () {},
+                              color: constantColors.blueColor,
+                            ),
+                          );
+                        }).toList());
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            height: MediaQuery.of(context).size.height * 0.50,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: constantColors.blueGreyColor,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  topRight: Radius.circular(12.0)),
+            ),
+          );
+        });
+  }
 }

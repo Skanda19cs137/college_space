@@ -177,6 +177,14 @@ class FeedHelpers with ChangeNotifier {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
+                              onLongPress: () {
+                                Provider.of<PostFunctions>(context,
+                                        listen: false)
+                                    .showLikes(
+                                        context,
+                                        (documentSnapshot.data()
+                                            as dynamic)['caption']);
+                              },
                               onTap: () {
                                 print('Adding like....');
                                 Provider.of<PostFunctions>(context,
