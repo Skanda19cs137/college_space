@@ -381,4 +381,107 @@ class PostFunctions with ChangeNotifier {
           );
         });
   }
+
+  showReward(BuildContext context, String postId) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 150.0),
+                  child: Divider(
+                    thickness: 4.0,
+                    color: constantColors.whiteColor,
+                  ),
+                ),
+                Container(
+                  width: 100.0,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: constantColors.whiteColor),
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: Center(
+                    child: Text('Rewards',
+                        style: TextStyle(
+                            color: constantColors.blueColor,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    width: MediaQuery.of(context).size.width,
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('awards')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          return ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: snapshot.data.docs
+                                  .map((DocumentSnapshot documentsnapshot) {
+                                return GestureDetector(
+                                  onTap: () async {
+                                    print((documentsnapshot.data()
+                                        as dynamic)['image']);
+                                    await Provider.of<FirebaseOperations>(
+                                            context,
+                                            listen: false)
+                                        .addAward(postId, {
+                                      'username':
+                                          Provider.of<FirebaseOperations>(
+                                                  context,
+                                                  listen: false)
+                                              .getInitUserName,
+                                      'userimage':
+                                          Provider.of<FirebaseOperations>(
+                                                  context,
+                                                  listen: false)
+                                              .getInitUserImage,
+                                      'useruid': Provider.of<Authentication>(
+                                              context,
+                                              listen: false)
+                                          .getUserUid,
+                                      'time': Timestamp.now(),
+                                      'award': (documentsnapshot.data()
+                                          as dynamic)['image']
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Container(
+                                      height: 50.0,
+                                      width: 50.0,
+                                      child: Image.network((documentsnapshot
+                                          .data() as dynamic)['image']),
+                                    ),
+                                  ),
+                                );
+                              }).toList());
+                        }
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+            height: MediaQuery.of(context).size.height * 0.2,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: constantColors.blueGreyColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0))),
+          );
+        });
+  }
 }

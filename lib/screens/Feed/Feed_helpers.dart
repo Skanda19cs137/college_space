@@ -285,22 +285,45 @@ class FeedHelpers with ChangeNotifier {
                         child: Row(
                           children: [
                             GestureDetector(
+                              onTap: () {
+                                Provider.of<PostFunctions>(context,
+                                        listen: false)
+                                    .showReward(
+                                        context,
+                                        (documentSnapshot.data()
+                                            as dynamic)['caption']);
+                              },
                               child: Icon(
                                 FontAwesomeIcons.award,
                                 color: constantColors.yellowColor,
                                 size: 22,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                '0',
-                                style: TextStyle(
-                                    color: constantColors.whiteColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0),
-                              ),
-                            )
+                            StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('posts')
+                                    .doc((documentSnapshot.data()
+                                        as dynamic)['caption'])
+                                    .collection('awards')
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                          snapshot.data.docs.length.toString(),
+                                          style: TextStyle(
+                                              color: constantColors.whiteColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18.0)),
+                                    );
+                                  }
+                                })
                           ],
                         ),
                       ),
