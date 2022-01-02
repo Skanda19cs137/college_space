@@ -12,11 +12,11 @@ import 'package:provider/provider.dart';
 class FirebaseOperations with ChangeNotifier {
   UploadTask imageUploadTask;
   String initUserEmail;
-  get getInitUserName => null;
+  get getInitUserName => initUserName;
   String initUserName;
-  get getInitUserEmail => null;
+  get getInitUserEmail => initUserEmail;
   String initUserImage;
-  get getInitUserImage => null;
+  get getInitUserImage => initUserImage;
 
   Future uploadUserAvatar(BuildContext context) async {
     Reference imageReference = FirebaseStorage.instance.ref().child(
@@ -45,7 +45,7 @@ class FirebaseOperations with ChangeNotifier {
 
   Future initUserData(BuildContext context) async {
     return FirebaseFirestore.instance
-        .collection('user')
+        .collection('users')
         .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
         .get()
         .then((doc) {

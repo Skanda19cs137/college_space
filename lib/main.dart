@@ -5,6 +5,7 @@ import 'package:college_space/screens/Homepage/HomePageHelpers.dart';
 import 'package:college_space/screens/LandingPage/LandingUtil.dart';
 import 'package:college_space/screens/LandingPage/landingHelpers.dart';
 import 'package:college_space/screens/LandingPage/landingServices.dart';
+import 'package:college_space/screens/Messaging/GroupMessageHelper.dart';
 import 'package:college_space/screens/Profile/ProfileHelpers.dart';
 import 'package:college_space/screens/Splashscreen/splashScreen.dart';
 import 'package:college_space/screens/UploadPost/uploadPost.dart';
@@ -46,7 +47,8 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => Authentication()),
           ChangeNotifierProvider(create: (_) => LandingHelpers()),
           ChangeNotifierProvider(create: (_) => LandingService()),
-          ChangeNotifierProvider(create: (_) => ChatroomHelper())
+          ChangeNotifierProvider(create: (_) => ChatroomHelper()),
+          ChangeNotifierProvider(create: (_) => GroupMessageHelper())
         ]);
   }
 }
