@@ -96,14 +96,18 @@ class LandingService with ChangeNotifier {
                 child: CircularProgressIndicator(),
               );
             } else {
-              return ListView(
-                children: snapshot.data.docs
-                    .map((DocumentSnapshot documentSnapshot) {
+              return new ListView(
+                children:
+                    snapshot.data.docs.map((DocumentSnapshot documentSnapshot) {
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: constantColors.transperant,
-                      backgroundImage: ((documentSnapshot.data() as dynamic)['userimage'] !=null)?
-                      NetworkImage((documentSnapshot.data() as dynamic)['userimage']): AssetImage('assets/images/empty.png'),
+                      backgroundColor: constantColors.darkColor,
+                      backgroundImage: ((documentSnapshot.data()
+                                  as dynamic)['userimage'] !=
+                              null)
+                          ? NetworkImage(
+                              (documentSnapshot.data() as dynamic)['userimage'])
+                          : AssetImage('assets/images/empty.png'),
                     ),
                     title: Text(
                       (documentSnapshot.data() as dynamic)['username'],
@@ -116,14 +120,46 @@ class LandingService with ChangeNotifier {
                       style: TextStyle(
                           fontSize: 12.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.greenAccent),
+                          color: Colors.white),
                     ),
-                    trailing: IconButton(
-                      icon: Icon(
-                        FontAwesomeIcons.trashAlt,
-                        color: constantColors.redColor,
+                    trailing: Container(
+                      width: 120.0,
+                      height: 50.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
+                            icon: Icon(FontAwesomeIcons.check,
+                                color: constantColors.blueColor),
+                            onPressed: () {
+                              Provider.of<Authentication>(context,
+                                      listen: false)
+                                  .logIntoAccount(
+                                      (documentSnapshot.data()
+                                          as dynamic)['useremail'],
+                                      (documentSnapshot.data()
+                                          as dynamic)['userpassword'])
+                                  .whenComplete(() {
+                                Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                        child: Homepage(),
+                                        type: PageTransitionType.leftToRight));
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(FontAwesomeIcons.trashAlt,
+                                color: constantColors.redColor),
+                            onPressed: () {
+                              Provider.of<FirebaseOperations>(context,
+                                      listen: false)
+                                  .deleteUserData((documentSnapshot.data()
+                                      as dynamic)['useruid']);
+                            },
+                          ),
+                        ],
                       ),
-                      onPressed: () {},
                     ),
                   );
                 }).toList(),
@@ -319,22 +355,22 @@ class LandingService with ChangeNotifier {
                             Provider.of<Authentication>(context, listen: false)
                                 .createAccount(userEmailController.text,
                                     userPasswordController.text)
-                                     .whenComplete(() {
-                                   print('Creating collection...');
-                                   Provider.of<FirebaseOperations>(context,
-                                           listen: false)
-                                       .createUserCollection(context, {
-                                     'useruid': Provider.of<Authentication>(context,
-                                             listen: false)
-                                         .getUserUid,
-                                     'useremail': userEmailController.text,
-                                     'username': userNameController.text,
-                                     'userImage': Provider.of<LandingUtils>(context,
-                                             listen: false)
-                                         .getUserAvatarUrl,
-                                   });
-                                 })
                                 .whenComplete(() {
+                              print('Creating collection...');
+                              Provider.of<FirebaseOperations>(context,
+                                      listen: false)
+                                  .createUserCollection(context, {
+                                'userpassword': userPasswordController.text,
+                                'useruid': Provider.of<Authentication>(context,
+                                        listen: false)
+                                    .getUserUid,
+                                'useremail': userEmailController.text,
+                                'username': userNameController.text,
+                                'userImage': Provider.of<LandingUtils>(context,
+                                        listen: false)
+                                    .getUserAvatarUrl,
+                              });
+                            }).whenComplete(() {
                               Navigator.pushReplacement(
                                   context,
                                   PageTransition(

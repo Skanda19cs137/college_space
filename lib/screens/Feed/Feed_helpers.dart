@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_space/constants/Constantcolors.dart';
 import 'package:college_space/screens/UploadPost/uploadPost.dart';
 import 'package:college_space/services/Authentication.dart';
+import 'package:college_space/utils/PostOptions.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class FeedHelpers with ChangeNotifier {
               }
             },
           ),
-          height: MediaQuery.of(context).size.height*0.9,
+          height: MediaQuery.of(context).size.height * 0.9,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               color: constantColors.darkColor,
@@ -100,8 +101,12 @@ class FeedHelpers with ChangeNotifier {
                       child: CircleAvatar(
                         backgroundColor: constantColors.transperant,
                         radius: 20.0,
-                        backgroundImage:((documentSnapshot.data() as dynamic)['userimage'] != null)? 
-                            NetworkImage((documentSnapshot.data() as dynamic)['userimage']) : AssetImage('assets/images/empty.png'),
+                        backgroundImage: ((documentSnapshot.data()
+                                    as dynamic)['userimage'] !=
+                                null)
+                            ? NetworkImage((documentSnapshot.data()
+                                as dynamic)['userimage'])
+                            : AssetImage('assets/images/empty.png'),
                       ),
                     ),
                     Padding(
@@ -113,7 +118,9 @@ class FeedHelpers with ChangeNotifier {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              child: Text((documentSnapshot.data() as dynamic)['caption'],
+                              child: Text(
+                                  (documentSnapshot.data()
+                                      as dynamic)['caption'],
                                   style: TextStyle(
                                       color: constantColors.greenColor,
                                       fontWeight: FontWeight.bold,
@@ -122,7 +129,8 @@ class FeedHelpers with ChangeNotifier {
                             Container(
                                 child: RichText(
                               text: TextSpan(
-                                  text: (documentSnapshot.data() as dynamic)['username'],
+                                  text: (documentSnapshot.data()
+                                      as dynamic)['username'],
                                   style: TextStyle(
                                       color: constantColors.blueColor,
                                       fontSize: 14.0,
@@ -147,8 +155,12 @@ class FeedHelpers with ChangeNotifier {
                   height: MediaQuery.of(context).size.height * 0.5,
                   width: MediaQuery.of(context).size.width,
                   child: FittedBox(
-                    child:((documentSnapshot.data() as dynamic)['postimage'] != null)? Image.network((documentSnapshot.data() as dynamic)['postimage'],
-                        scale: 2):AssetImage('assets/images/empty.png'),
+                    child: ((documentSnapshot.data() as dynamic)['postimage'] !=
+                            null)
+                        ? Image.network(
+                            (documentSnapshot.data() as dynamic)['postimage'],
+                            scale: 2)
+                        : AssetImage('assets/images/empty.png'),
                   ),
                 ),
               ),
@@ -190,6 +202,15 @@ class FeedHelpers with ChangeNotifier {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
+                              onTap: () {
+                                Provider.of<PostFunctions>(context,
+                                        listen: false)
+                                    .showCommentsSheet(
+                                        context,
+                                        documentSnapshot,
+                                        (documentSnapshot.data()
+                                            as dynamic)['caption']);
+                              },
                               child: Icon(
                                 FontAwesomeIcons.comment,
                                 color: constantColors.greenColor,
