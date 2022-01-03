@@ -1,11 +1,21 @@
 import 'package:college_space/constants/Constantcolors.dart';
+import 'package:college_space/services/FirebaseOperations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'landingHelpers.dart';
 
-class Landingpage extends StatelessWidget {
+class Landingpage extends StatefulWidget {
+  @override
+  State<Landingpage> createState() => _LandingpageState();
+}
+
+class _LandingpageState extends State<Landingpage> {
   final ConstantColors constantColors = ConstantColors();
+  void initstate(){
+    Provider.of<FirebaseOperations>(context,listen: false).initUserData(context);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +30,7 @@ class Landingpage extends StatelessWidget {
       ),
     );
   }
+
   bodyColor(){
     return Container(
       decoration: BoxDecoration(

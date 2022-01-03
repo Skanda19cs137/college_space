@@ -4,13 +4,23 @@ import 'package:college_space/constants/Constantcolors.dart';
 import 'package:college_space/screens/LandingPage/landingPage.dart';
 import 'package:college_space/screens/Profile/ProfileHelpers.dart';
 import 'package:college_space/services/Authentication.dart';
+import 'package:college_space/services/FirebaseOperations.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
   final ConstantColors constantColors = ConstantColors();
+  void initstate(){
+    Provider.of<FirebaseOperations>(context,listen: false).initUserData(context);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,6 +104,7 @@ class Profile extends StatelessWidget {
       ),
     ); // Scaffold
   }
+
   logOutDialog(BuildContext context){
     return showDialog(context: context, builder: (context){
       return AlertDialog(

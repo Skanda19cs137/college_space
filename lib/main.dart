@@ -22,8 +22,18 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initstate(){
+    Provider.of<FirebaseOperations>(context,listen: false).initUserData(context);
+    super.initState();
+  }
   Widget build(BuildContext context) {
     ConstantColors constantColors = ConstantColors();
     return MultiProvider(
@@ -31,9 +41,8 @@ class MyApp extends StatelessWidget {
           home: Splashscreen(),
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-              accentColor: constantColors.blueColor,
               fontFamily: 'Poppins',
-              canvasColor: Colors.transparent),
+              canvasColor: Colors.transparent, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: constantColors.blueColor)),
         ),
         providers: [
           ChangeNotifierProvider(create: (_) => PostFunctions()),
