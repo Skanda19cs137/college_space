@@ -101,11 +101,9 @@ class FeedHelpers with ChangeNotifier {
                       child: CircleAvatar(
                         backgroundColor: constantColors.transperant,
                         radius: 20.0,
-                        backgroundImage: ((documentSnapshot.data()
-                                    as dynamic)['userimage'] !=
+                        backgroundImage: (documentSnapshot.get('userimage') !=
                                 null)
-                            ? NetworkImage((documentSnapshot.data()
-                                as dynamic)['userimage'])
+                            ? NetworkImage(documentSnapshot.get('userimage'))
                             : AssetImage('assets/images/empty.png'),
                       ),
                     ),
@@ -119,8 +117,7 @@ class FeedHelpers with ChangeNotifier {
                           children: [
                             Container(
                               child: Text(
-                                  (documentSnapshot.data()
-                                      as dynamic)['caption'],
+                                  documentSnapshot.get('caption'),
                                   style: TextStyle(
                                       color: constantColors.greenColor,
                                       fontWeight: FontWeight.bold,
@@ -129,8 +126,7 @@ class FeedHelpers with ChangeNotifier {
                             Container(
                                 child: RichText(
                               text: TextSpan(
-                                  text: (documentSnapshot.data()
-                                      as dynamic)['username'],
+                                  text: documentSnapshot.get('username'),
                                   style: TextStyle(
                                       color: constantColors.blueColor,
                                       fontSize: 14.0,
@@ -155,10 +151,10 @@ class FeedHelpers with ChangeNotifier {
                   height: MediaQuery.of(context).size.height * 0.5,
                   width: MediaQuery.of(context).size.width,
                   child: FittedBox(
-                    child: ((documentSnapshot.data() as dynamic)['postimage'] !=
+                    child: (documentSnapshot.get('postimage')!=
                             null)
                         ? Image.network(
-                            (documentSnapshot.data() as dynamic)['postimage'],
+                            documentSnapshot.get('postimage'),
                             scale: 2)
                         : AssetImage('assets/images/empty.png'),
                   ),
@@ -182,8 +178,7 @@ class FeedHelpers with ChangeNotifier {
                                         listen: false)
                                     .showLikes(
                                         context,
-                                        (documentSnapshot.data()
-                                            as dynamic)['caption']);
+                                        documentSnapshot.get('caption'));
                               },
                               onTap: () {
                                 print('Adding like....');
@@ -191,8 +186,7 @@ class FeedHelpers with ChangeNotifier {
                                         listen: false)
                                     .addLike(
                                         context,
-                                        (documentSnapshot.data()
-                                            as dynamic)['caption'],
+                                        documentSnapshot.get('caption'),
                                         Provider.of<Authentication>(context,
                                                 listen: false)
                                             .getUserUid);
@@ -206,8 +200,7 @@ class FeedHelpers with ChangeNotifier {
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('posts')
-                                    .doc((documentSnapshot.data()
-                                        as dynamic)['caption'])
+                                    .doc(documentSnapshot.get('caption'))
                                     .collection('likes')
                                     .snapshots(),
                                 builder: (context, snapshot) {
@@ -243,8 +236,7 @@ class FeedHelpers with ChangeNotifier {
                                     .showCommentsSheet(
                                         context,
                                         documentSnapshot,
-                                        (documentSnapshot.data()
-                                            as dynamic)['caption']);
+                                        documentSnapshot.get('caption'));
                               },
                               child: Icon(
                                 FontAwesomeIcons.comment,
@@ -255,8 +247,7 @@ class FeedHelpers with ChangeNotifier {
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('posts')
-                                    .doc((documentSnapshot.data()
-                                        as dynamic)['caption'])
+                                    .doc(documentSnapshot.get('caption'))
                                     .collection('comments')
                                     .snapshots(),
                                 builder: (context, snapshot) {
@@ -290,8 +281,7 @@ class FeedHelpers with ChangeNotifier {
                                         listen: false)
                                     .showReward(
                                         context,
-                                        (documentSnapshot.data()
-                                            as dynamic)['caption']);
+                                        documentSnapshot.get('caption'));
                               },
                               child: Icon(
                                 FontAwesomeIcons.award,
@@ -302,8 +292,7 @@ class FeedHelpers with ChangeNotifier {
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('posts')
-                                    .doc((documentSnapshot.data()
-                                        as dynamic)['caption'])
+                                    .doc(documentSnapshot.get('caption'))
                                     .collection('awards')
                                     .snapshots(),
                                 builder: (context, snapshot) {
@@ -330,7 +319,7 @@ class FeedHelpers with ChangeNotifier {
                       Spacer(),
                       Provider.of<Authentication>(context, listen: false)
                                   .getUserUid ==
-                              (documentSnapshot.data() as dynamic)['useruid']
+                              documentSnapshot.get('useruid')
                           ? IconButton(
                               icon: Icon(
                                 EvaIcons.moreVertical,

@@ -29,7 +29,7 @@ class _GroupMessageState extends State<GroupMessage> {
   void initState() {
     Provider.of<GroupMessageHelper>(context, listen: false)
         .checkIfJoined(context, widget.documentSnapshot.id,
-            (widget.documentSnapshot.data() as dynamic)['useruid'])
+            widget.documentSnapshot.get('useruid'))
         .whenComplete(() async {
       if (Provider.of<GroupMessageHelper>(context, listen: false)
           .getHasMemmberJoined) {
@@ -47,7 +47,7 @@ class _GroupMessageState extends State<GroupMessage> {
       appBar: AppBar(
         actions: [
           Provider.of<Authentication>(context, listen: false).getUserUid ==
-                  (widget.documentSnapshot.data() as dynamic)['useruid']
+                  widget.documentSnapshot.get('useruid')
               ? IconButton(
                   icon: Icon(
                     EvaIcons.moreVertical,
@@ -74,7 +74,7 @@ class _GroupMessageState extends State<GroupMessage> {
             Navigator.pushReplacement(
                 context,
                 PageTransition(
-                    child: Homepage(), type: PageTransitionType.scale));
+                    child: Homepage(), type: PageTransitionType.bottomToTop));
           },
         ),
         backgroundColor: constantColors.darkColor.withOpacity(0.6),
@@ -85,7 +85,7 @@ class _GroupMessageState extends State<GroupMessage> {
               CircleAvatar(
                 backgroundColor: constantColors.darkColor,
                 backgroundImage: NetworkImage(
-                    (widget.documentSnapshot.data() as dynamic)['roomavatar']),
+                    widget.documentSnapshot.get('roomavatar')),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
@@ -94,7 +94,7 @@ class _GroupMessageState extends State<GroupMessage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      (widget.documentSnapshot.data() as dynamic)['roomname'],
+                      widget.documentSnapshot.get('roomname'),
                       style: TextStyle(
                           color: constantColors.whiteColor,
                           fontWeight: FontWeight.bold,
@@ -131,8 +131,8 @@ class _GroupMessageState extends State<GroupMessage> {
                 duration: Duration(seconds: 1),
                 child: Provider.of<GroupMessageHelper>(context, listen: false)
                     .showMessages(context, widget.documentSnapshot,
-                        (widget.documentSnapshot.data() as dynamic)['useruid']),
-                curve: Curves.bounceIn,
+                        widget.documentSnapshot.get('useruid')),
+                curve: Curves.easeIn,
                 height: MediaQuery.of(context).size.height * 0.8,
                 width: MediaQuery.of(context).size.width,
               ),

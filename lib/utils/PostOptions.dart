@@ -123,9 +123,7 @@ class PostFunctions with ChangeNotifier {
                                                     .blueGreyColor,
                                                 radius: 15.0,
                                                 backgroundImage: NetworkImage(
-                                                    (documentSnapshot.data()
-                                                            as dynamic)[
-                                                        'userimage']),
+                                                    documentSnapshot.get('userimage')),
                                               ),
                                             ),
                                           ),
@@ -134,8 +132,7 @@ class PostFunctions with ChangeNotifier {
                                                 left: 8.0),
                                             child: Container(
                                                 child: Text(
-                                              (documentSnapshot.data()
-                                                  as dynamic)['username'],
+                                              documentSnapshot.get('username'),
                                               style: TextStyle(
                                                   color:
                                                       constantColors.whiteColor,
@@ -195,8 +192,7 @@ class PostFunctions with ChangeNotifier {
                                                       .width *
                                                   0.75,
                                               child: Text(
-                                                (documentSnapshot.data()
-                                                    as dynamic)['comment'],
+                                                documentSnapshot.get('comment'),
                                                 style: TextStyle(
                                                     color: constantColors
                                                         .whiteColor,
@@ -258,7 +254,7 @@ class PostFunctions with ChangeNotifier {
                                 print('Adding Comment....');
                                 addComment(
                                         context,
-                                        (snapshot.data() as dynamic)['caption'],
+                                        snapshot.get('caption'),
                                         commentController.text)
                                     .whenComplete(() {
                                   commentController.clear();
@@ -325,19 +321,19 @@ class PostFunctions with ChangeNotifier {
                           return ListTile(
                             leading: GestureDetector(
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage((documentSnapshot
-                                    .data() as dynamic)['userimage']),
+                                backgroundImage: NetworkImage(documentSnapshot
+                                    .get('userimage')),
                               ),
                             ),
                             title: Text(
-                              (documentSnapshot.data() as dynamic)['username'],
+                              documentSnapshot.get('username'),
                               style: TextStyle(
                                   color: constantColors.blueColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.0),
                             ),
                             subtitle: Text(
-                              (documentSnapshot.data() as dynamic)['useremail'],
+                              documentSnapshot.get('useremail'),
                               style: TextStyle(
                                   color: constantColors.whiteColor,
                                   fontWeight: FontWeight.bold,
@@ -346,8 +342,7 @@ class PostFunctions with ChangeNotifier {
                             trailing: Provider.of<Authentication>(context,
                                             listen: false)
                                         .getUserUid ==
-                                    (documentSnapshot.data()
-                                        as dynamic)['useruid']
+                                    documentSnapshot.get('useruid')
                                 ? Container(
                                     width: 0.0,
                                     height: 0.0,
@@ -431,8 +426,7 @@ class PostFunctions with ChangeNotifier {
                                   .map((DocumentSnapshot documentsnapshot) {
                                 return GestureDetector(
                                   onTap: () async {
-                                    print((documentsnapshot.data()
-                                        as dynamic)['image']);
+                                    print(documentsnapshot.get('image'));
                                     await Provider.of<FirebaseOperations>(
                                             context,
                                             listen: false)
@@ -452,8 +446,7 @@ class PostFunctions with ChangeNotifier {
                                               listen: false)
                                           .getUserUid,
                                       'time': Timestamp.now(),
-                                      'award': (documentsnapshot.data()
-                                          as dynamic)['image']
+                                      'award': documentsnapshot.get('image')
                                     });
                                   },
                                   child: Padding(
@@ -461,8 +454,8 @@ class PostFunctions with ChangeNotifier {
                                     child: Container(
                                       height: 50.0,
                                       width: 50.0,
-                                      child: Image.network((documentsnapshot
-                                          .data() as dynamic)['image']),
+                                      child: Image.network(documentsnapshot
+                                          .get('image')),
                                     ),
                                   ),
                                 );

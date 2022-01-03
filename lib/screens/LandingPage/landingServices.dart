@@ -96,27 +96,26 @@ class LandingService with ChangeNotifier {
                 child: CircularProgressIndicator(),
               );
             } else {
-              return new ListView(
+              return ListView(
                 children:
                     snapshot.data.docs.map((DocumentSnapshot documentSnapshot) {
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundColor: constantColors.darkColor,
-                      backgroundImage: ((documentSnapshot.data()
-                                  as dynamic)['userimage'] !=
+                      backgroundImage: (documentSnapshot.get('userimage') !=
                               null)
                           ? NetworkImage(
-                              (documentSnapshot.data() as dynamic)['userimage'])
+                              documentSnapshot.get('userimage'))
                           : AssetImage('assets/images/empty.png'),
                     ),
                     title: Text(
-                      (documentSnapshot.data() as dynamic)['username'],
+                      documentSnapshot.get('username'),
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.greenAccent),
                     ),
                     subtitle: Text(
-                      (documentSnapshot.data() as dynamic)['useremail'],
+                      documentSnapshot.get('useremail'),
                       style: TextStyle(
                           fontSize: 12.0,
                           fontWeight: FontWeight.bold,
@@ -135,10 +134,8 @@ class LandingService with ChangeNotifier {
                               Provider.of<Authentication>(context,
                                       listen: false)
                                   .logIntoAccount(
-                                      (documentSnapshot.data()
-                                          as dynamic)['useremail'],
-                                      (documentSnapshot.data()
-                                          as dynamic)['userpassword'])
+                                      documentSnapshot.get('useremail'),
+                                      documentSnapshot.get('userpassword'))
                                   .whenComplete(() {
                                 Navigator.pushReplacement(
                                     context,
@@ -154,8 +151,7 @@ class LandingService with ChangeNotifier {
                             onPressed: () {
                               Provider.of<FirebaseOperations>(context,
                                       listen: false)
-                                  .deleteUserData((documentSnapshot.data()
-                                      as dynamic)['useruid']);
+                                  .deleteUserData(documentSnapshot.get('useruid'));
                             },
                           ),
                         ],
@@ -366,7 +362,7 @@ class LandingService with ChangeNotifier {
                                     .getUserUid,
                                 'useremail': userEmailController.text,
                                 'username': userNameController.text,
-                                'userImage': Provider.of<LandingUtils>(context,
+                                'userimage': Provider.of<LandingUtils>(context,
                                         listen: false)
                                     .getUserAvatarUrl,
                               });

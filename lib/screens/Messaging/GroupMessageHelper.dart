@@ -67,8 +67,7 @@ class GroupMessageHelper with ChangeNotifier {
                                             child: Row(
                                               children: [
                                                 Text(
-                                                  (documentSnapshot.data()
-                                                      as dynamic)['username'],
+                                                  documentSnapshot.get('username'),
                                                   style: TextStyle(
                                                       color: constantColors
                                                           .greenColor,
@@ -102,8 +101,7 @@ class GroupMessageHelper with ChangeNotifier {
                                             ),
                                           ),
                                           Text(
-                                            (documentSnapshot.data()
-                                                as dynamic)['message'],
+                                            documentSnapshot.get('message'),
                                             style: TextStyle(
                                               color: constantColors.whiteColor,
                                               fontSize: 14.0,
@@ -118,8 +116,7 @@ class GroupMessageHelper with ChangeNotifier {
                                                       context,
                                                       listen: false)
                                                   .getUserUid ==
-                                              (documentSnapshot.data()
-                                                  as dynamic)['useruid']
+                                              documentSnapshot.get('useruid')
                                           ? constantColors.blueGreyColor
                                               .withOpacity(0.7)
                                           : constantColors.blueGreyColor,
@@ -133,8 +130,7 @@ class GroupMessageHelper with ChangeNotifier {
                               child: Provider.of<Authentication>(context,
                                               listen: false)
                                           .getUserUid ==
-                                      (documentSnapshot.data()
-                                          as dynamic)['useruid']
+                                      documentSnapshot.get('useruid')
                                   ? Container(
                                       child: Column(
                                         children: [
@@ -163,8 +159,7 @@ class GroupMessageHelper with ChangeNotifier {
                               child: Provider.of<Authentication>(context,
                                               listen: false)
                                           .getUserUid ==
-                                      (documentSnapshot.data()
-                                          as dynamic)['useruid']
+                                      documentSnapshot.get('useruid')
                                   ? Container(
                                       height: 0.0,
                                       width: 0.0,
@@ -172,8 +167,7 @@ class GroupMessageHelper with ChangeNotifier {
                                   : CircleAvatar(
                                       backgroundColor: constantColors.darkColor,
                                       backgroundImage: NetworkImage(
-                                          (documentSnapshot.data()
-                                              as dynamic)['userimage']),
+                                          documentSnapshot.get('userimage')),
                                     ))
                         ],
                       ),

@@ -21,7 +21,6 @@ class ProfileHelpers with ChangeNotifier {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              color: constantColors.redColor,
               height: 220.0,
               width: 180.0,
               child: Column(
@@ -35,7 +34,7 @@ class ProfileHelpers with ChangeNotifier {
                               NetworkImage(snapshot.data.data()['userimage']):AssetImage('assets/images/empty.png')
                       )),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(left: 8.0),
                     child: Text(snapshot.data.data()['username'],
                         style: TextStyle(
                             color: constantColors.whiteColor,
@@ -50,12 +49,14 @@ class ProfileHelpers with ChangeNotifier {
                         Icon(EvaIcons.email,
                             color: constantColors.greenColor, size: 16.0),
                         Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
+                          padding: const EdgeInsets.only(left: 3.0),
                           child: Text(snapshot.data.data()['useremail'],
                               style: TextStyle(
                                   color: constantColors.whiteColor,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12.0)),
+                                  fontSize: 12.0),
+                            overflow: TextOverflow.clip,
+                          ),
                         ),
                       ],
                     ),
@@ -64,7 +65,6 @@ class ProfileHelpers with ChangeNotifier {
               ),
             ),
             Container(
-              color: constantColors.yellowColor,
               child: Column(
                 children: [
                   Padding(padding: const EdgeInsets.only(top: 16.0)),
@@ -200,7 +200,7 @@ class ProfileHelpers with ChangeNotifier {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           child: Image.asset('assets/images/empty.png'),
-          height: MediaQuery.of(context).size.height * 0.53,
+          height: MediaQuery.of(context).size.height * 0.5,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               color: constantColors.darkColor.withOpacity(0.4),
@@ -251,7 +251,7 @@ class ProfileHelpers with ChangeNotifier {
                           Navigator.pushReplacement(context,
                             PageTransition(
                                 child: Landingpage(),
-                                type: PageTransitionType.rotate)
+                                type: PageTransitionType.bottomToTop)
                           );
                     });
                   })
