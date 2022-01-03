@@ -6,10 +6,165 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PostFunctions with ChangeNotifier {
   TextEditingController commentController = TextEditingController();
   ConstantColors constantColors = ConstantColors();
+  String imageTimePosted;
+  String get getImageTimePosted => imageTimePosted;
+  TextEditingController updatedCaptionController = TextEditingController();
+  showTimeAgo(dynamic timedata) {
+    Timestamp time = timedata;
+    DateTime dateTime = time.toDate();
+    imageTimePosted = timeago.format(dateTime);
+    notifyListeners();
+  }
+
+  showPostOption(BuildContext context, String postId) {
+    return showModalBottomSheet(
+      isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding:  EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 150.0),
+                    child: Divider(
+                      thickness: 4.0,
+                      color: constantColors.whiteColor,
+                    ),
+                  ),
+                  Container(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                        color: constantColors.blueColor,
+                        child: Text('Edit Caption',
+                            style: TextStyle(
+                                color: constantColors.whiteColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0)),
+                        onPressed: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return Container(
+                                  child: Center(
+                                      child: Row(
+                                    children: [
+                                      Container(
+                                        width: 300.0,
+                                        height: 50.0,
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                              hintText: 'Add New Caption',
+                                              hintStyle: TextStyle(
+                                                  color:
+                                                      constantColors.whiteColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16.0)),
+                                          style: TextStyle(
+                                              color: constantColors.whiteColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.0),
+                                          controller: updatedCaptionController,
+                                        ),
+                                      ),
+                                      FloatingActionButton(
+                                          backgroundColor:
+                                              constantColors.redColor,
+                                          child: Icon(
+                                            FontAwesomeIcons.fileUpload,
+                                            color: constantColors.whiteColor,
+                                          ),
+                                          onPressed: () {
+                                            Provider.of<FirebaseOperations>(
+                                                    context,
+                                                    listen: false)
+                                                .updateCaption(postId, {
+                                              'caption':
+                                                  updatedCaptionController.text
+                                            });
+                                          })
+                                    ],
+                                  )),
+                                );
+                              });
+                        },
+                      ),
+                      MaterialButton(
+                        color: constantColors.redColor,
+                        child: Text('Delete Caption',
+                            style: TextStyle(
+                                color: constantColors.whiteColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0)),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  backgroundColor: constantColors.darkColor,
+                                  title: Text('Delete This Post? ',
+                                      style: TextStyle(
+                                          color: constantColors.whiteColor,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold)),
+                                  actions: [
+                                    MaterialButton(
+                                      child: Text('No',
+                                          style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor:
+                                                  constantColors.whiteColor,
+                                              color: constantColors.whiteColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.0)),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    MaterialButton(
+                                      color: constantColors.redColor,
+                                      child: Text('Yes',
+                                          style: TextStyle(
+                                              color: constantColors.whiteColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.0)),
+                                      onPressed: () {
+                                        Provider.of<FirebaseOperations>(context,
+                                                listen: false)
+                                            .deleteUserData(postId, 'post')
+                                            .whenComplete(
+                                                () => Navigator.pop(context));
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                      ),
+                    ],
+                  ))
+                ],
+              ),
+              height: MediaQuery.of(context).size.height * 0.1,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: constantColors.blueGreyColor,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(12.0)),
+              ),
+            ),
+          );
+        });
+  }
+
   Future addLike(BuildContext context, String postId, subDocId) async {
     return FirebaseFirestore.instance
         .collection('posts')
@@ -123,9 +278,7 @@ class PostFunctions with ChangeNotifier {
                                                     .blueGreyColor,
                                                 radius: 15.0,
                                                 backgroundImage: NetworkImage(
-                                                    (documentSnapshot.data()
-                                                            as dynamic)[
-                                                        'userimage']),
+                                                    documentSnapshot.get('userimage')),
                                               ),
                                             ),
                                           ),
@@ -134,8 +287,7 @@ class PostFunctions with ChangeNotifier {
                                                 left: 8.0),
                                             child: Container(
                                                 child: Text(
-                                              (documentSnapshot.data()
-                                                  as dynamic)['username'],
+                                              documentSnapshot.get('username'),
                                               style: TextStyle(
                                                   color:
                                                       constantColors.whiteColor,
@@ -195,8 +347,7 @@ class PostFunctions with ChangeNotifier {
                                                       .width *
                                                   0.75,
                                               child: Text(
-                                                (documentSnapshot.data()
-                                                    as dynamic)['comment'],
+                                                documentSnapshot.get('comment'),
                                                 style: TextStyle(
                                                     color: constantColors
                                                         .whiteColor,
@@ -258,7 +409,7 @@ class PostFunctions with ChangeNotifier {
                                 print('Adding Comment....');
                                 addComment(
                                         context,
-                                        (snapshot.data() as dynamic)['caption'],
+                                        snapshot.get('caption'),
                                         commentController.text)
                                     .whenComplete(() {
                                   commentController.clear();
@@ -325,19 +476,19 @@ class PostFunctions with ChangeNotifier {
                           return ListTile(
                             leading: GestureDetector(
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage((documentSnapshot
-                                    .data() as dynamic)['userimage']),
+                                backgroundImage: NetworkImage(documentSnapshot
+                                    .get('userimage')),
                               ),
                             ),
                             title: Text(
-                              (documentSnapshot.data() as dynamic)['username'],
+                              documentSnapshot.get('username'),
                               style: TextStyle(
                                   color: constantColors.blueColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.0),
                             ),
                             subtitle: Text(
-                              (documentSnapshot.data() as dynamic)['useremail'],
+                              documentSnapshot.get('useremail'),
                               style: TextStyle(
                                   color: constantColors.whiteColor,
                                   fontWeight: FontWeight.bold,
@@ -346,8 +497,7 @@ class PostFunctions with ChangeNotifier {
                             trailing: Provider.of<Authentication>(context,
                                             listen: false)
                                         .getUserUid ==
-                                    (documentSnapshot.data()
-                                        as dynamic)['useruid']
+                                    documentSnapshot.get('useruid')
                                 ? Container(
                                     width: 0.0,
                                     height: 0.0,
@@ -431,8 +581,7 @@ class PostFunctions with ChangeNotifier {
                                   .map((DocumentSnapshot documentsnapshot) {
                                 return GestureDetector(
                                   onTap: () async {
-                                    print((documentsnapshot.data()
-                                        as dynamic)['image']);
+                                    print(documentsnapshot.get('image'));
                                     await Provider.of<FirebaseOperations>(
                                             context,
                                             listen: false)
@@ -452,8 +601,7 @@ class PostFunctions with ChangeNotifier {
                                               listen: false)
                                           .getUserUid,
                                       'time': Timestamp.now(),
-                                      'award': (documentsnapshot.data()
-                                          as dynamic)['image']
+                                      'award': documentsnapshot.get('image')
                                     });
                                   },
                                   child: Padding(
@@ -461,8 +609,8 @@ class PostFunctions with ChangeNotifier {
                                     child: Container(
                                       height: 50.0,
                                       width: 50.0,
-                                      child: Image.network((documentsnapshot
-                                          .data() as dynamic)['image']),
+                                      child: Image.network(documentsnapshot
+                                          .get('image')),
                                     ),
                                   ),
                                 );

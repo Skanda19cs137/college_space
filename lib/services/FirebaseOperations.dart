@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 import 'package:js/js.dart';
 import 'package:universal_html/html.dart';
@@ -12,12 +13,11 @@ import 'package:provider/provider.dart';
 class FirebaseOperations with ChangeNotifier {
   UploadTask imageUploadTask;
   String initUserEmail;
-  get getInitUserName => initUserName;
   String initUserName;
-  get getInitUserEmail => initUserEmail;
   String initUserImage;
-  get getInitUserImage => initUserImage;
-
+  String get getInitUserName=>initUserName;
+  String get getInitUserEmail=> initUserEmail;
+  String get getInitUserImage =>initUserImage;
   Future uploadUserAvatar(BuildContext context) async {
     Reference imageReference = FirebaseStorage.instance.ref().child(
         'userProfileAvatar/${Provider.of<LandingUtils>(context, listen: false).getUserAvatar.path}/${TimeOfDay.now()}');
@@ -51,8 +51,8 @@ class FirebaseOperations with ChangeNotifier {
         .then((doc) {
       print("Fetching user data");
       initUserName = doc.data()['username'];
-      initUserName = doc.data()['useremail'];
-      initUserName = doc.data()['userimage'];
+      initUserEmail = doc.data()['useremail'];
+      initUserImage = doc.data()['userimage'];
       notifyListeners();
     });
   }
@@ -68,8 +68,18 @@ class FirebaseOperations with ChangeNotifier {
         .set(chatroomData);
   }
 
-  Future deleteUserData(String userUid) async {
-    return FirebaseFirestore.instance.collection('users').doc(userUid).delete();
+  Future deleteUserData(String userUid, dynamic collection) async {
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .doc(userUid)
+        .delete();
+  }
+
+  Future updateCaption(String postId, dynamic data) async {
+    return FirebaseFirestore.instance
+        .collection('post')
+        .doc(postId)
+        .update(data);
   }
 
   Future addAward(String postId, dynamic data) async {

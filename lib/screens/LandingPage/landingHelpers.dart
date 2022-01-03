@@ -26,10 +26,18 @@ class LandingHelpers with ChangeNotifier {
       top: 450.0,
       left: 10.0,
       child: Container(
-        constraints: BoxConstraints(maxWidth: 200.0),
-        child: RichText(
-          text: TextSpan(
-            text: "Interact , Innovate , Inspire .",
+        constraints: BoxConstraints(maxWidth: 350.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: RichText(
+            text: TextSpan(
+              text: "Interact , Innovate , Inspire .",
+              style: TextStyle(
+                color: constantColors.lightBlueColor,
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+              )
+            ),
           ),
         ),
       ),
@@ -60,24 +68,14 @@ class LandingHelpers with ChangeNotifier {
                 },
                 child: Container(
                   child: Icon(FontAwesomeIcons.google,
-                      color: constantColors.blueColor),
+                      color: constantColors.whiteColor),
                   width: 80.0,
                   height: 40.0,
                   decoration: BoxDecoration(
                       border: Border.all(color: constantColors.blueColor),
-                      borderRadius: BorderRadius.circular(10.0)),
-                ),
-              ),
-              // Facebook Sign In
-              GestureDetector(
-                child: Container(
-                  child: Icon(FontAwesomeIcons.facebook,
-                      color: constantColors.redColor),
-                  width: 80.0,
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: constantColors.redColor),
-                      borderRadius: BorderRadius.circular(10.0)),
+                      borderRadius: BorderRadius.circular(10.0),
+                      color:constantColors.blueColor
+                  ),
                 ),
               ),
               //Email Sign In
@@ -87,12 +85,14 @@ class LandingHelpers with ChangeNotifier {
                 },
                 child: Container(
                   child:
-                      Icon(EvaIcons.email, color: constantColors.yellowColor),
+                      Icon(Icons.email_rounded, color: constantColors.whiteColor),
                   width: 80.0,
                   height: 40.0,
                   decoration: BoxDecoration(
-                      border: Border.all(color: constantColors.yellowColor),
-                      borderRadius: BorderRadius.circular(10.0)),
+                      border: Border.all(color: constantColors.redColor),
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: constantColors.redColor
+                  ),
                 ),
               )
             ],
@@ -158,24 +158,5 @@ class LandingHelpers with ChangeNotifier {
         });
   }
 
-  Widget privacyText(BuildContext context) {
-    return Positioned(
-        top: 630.0,
-        left: 20.0,
-        right: 20.0,
-        child: Container(
-          child: Column(
-            children: [
-              Text(
-                "By continuing you agree to T&C of ",
-                style: TextStyle(color: Colors.red),
-              ),
-              Text(
-                "College Space",
-                style: TextStyle(color: Colors.red),
-              )
-            ],
-          ),
-        ));
-  }
+
 }

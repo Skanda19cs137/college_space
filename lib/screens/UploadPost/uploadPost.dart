@@ -264,19 +264,11 @@ class UploadPost with ChangeNotifier {
                         .uploadPostData(captionController.text, {
                       'postimage': getUploadPostImageUrl,
                       'caption': captionController.text,
-                      'username': Provider.of<FirebaseOperations>(context,
-                              listen: false)
-                          .getInitUserName,
-                      'userImage': Provider.of<FirebaseOperations>(context,
-                              listen: false)
-                          .getInitUserImage,
-                      'useruid':
-                          Provider.of<Authentication>(context, listen: false)
-                              .getUserUid,
+                      'username': Provider.of<FirebaseOperations>(context,listen: false).getInitUserName,
+                      'userimage': Provider.of<FirebaseOperations>(context,listen: false).getInitUserImage,
+                      'useruid':Provider.of<Authentication>(context, listen: false).getUserUid,
                       'time': Timestamp.now(),
-                      'useremail': Provider.of<FirebaseOperations>(context,
-                              listen: false)
-                          .getInitUserEmail,
+                      'useremail': Provider.of<FirebaseOperations>(context,listen: false).getInitUserEmail,
                     }).whenComplete(() {
                       Navigator.pop(context);
                     });

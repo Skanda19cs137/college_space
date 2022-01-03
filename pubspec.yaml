@@ -47,8 +47,9 @@ dependencies:
   http:
   universal_html: ^2.0.8
   lottie: ^1.2.1
-  timeago: 
+  timeago:
 
+  timeago: ^2.0.29
 
 
 dev_dependencies:
@@ -76,7 +77,6 @@ flutter:
     - assets/images/login.png
     - assets/images/empty.png
     - assets/animations/loading.json
-    - assets/images/sticker.jpg
   fonts:
     - family: Poppins
       fonts:

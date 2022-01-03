@@ -74,24 +74,25 @@ class ChatroomHelper with ChangeNotifier {
                             children: snapshot.data.docs
                                 .map((DocumentSnapshot documentSnapshot) {
                               return GestureDetector(
-                                onTap: (){
-                                 // if(Provider.of<Authentication>(context, listen: false).getUserUid != (documentSnapshot.data() as dynamic)['useruid']){
-                                 //   Navigator.pushReplacement(context,
-                                 //     PageTransition(child: AltProfile(
-                                 //       useruid:(documentSnapshot.data() as dynamic)['useruid']
-                                 //     ),
-                                 //         type: PageTransitionType.rotate)
-                                 //   );
-                                 // }
+                                onTap: () {
+                                  //if(Provider.of<Authentication>(context, listen: false).getUserUid != (documentSnapshot.get('useruid'))){
+                                  //   Navigator.pushReplacement(context,
+                                  //     PageTransition(child: AltProfile(
+                                  //       useruid:documentSnapshot.data()['useruid']
+                                  //     ),
+                                  //         type: PageTransitionType.rotate)
+                                  //   );
+                                  // }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 10.0),
                                   child: CircleAvatar(
                                     backgroundColor: constantColors.darkColor,
                                     radius: 25.0,
-                                    backgroundImage: NetworkImage(
-                                        (documentSnapshot.data()
-                                            as dynamic)['userimage']),
+                                    backgroundImage: documentSnapshot.get('userimage') !=
+                                            null
+                                        ? NetworkImage(documentSnapshot.get('userimage'))
+                                        : AssetImage('assets/images/empty.png'),
                                   ),
                                 ),
                               );
@@ -121,13 +122,15 @@ class ChatroomHelper with ChangeNotifier {
                     children: [
                       CircleAvatar(
                         backgroundColor: constantColors.transperant,
-                        backgroundImage: NetworkImage(
-                            (documentSnapshot.data() as dynamic)['userimage']),
+                        backgroundImage:  documentSnapshot.get('userimage') !=
+                            null
+                            ? NetworkImage(documentSnapshot.get('userimage'))
+                            : AssetImage('assets/images/empty.png'),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          (documentSnapshot.data() as dynamic)['username'],
+                          documentSnapshot.get('username'),
                           style: TextStyle(
                               color: constantColors.whiteColor,
                               fontSize: 16.0,
@@ -184,8 +187,7 @@ class ChatroomHelper with ChangeNotifier {
                                 .map((DocumentSnapshot documentSnapshot) {
                               return GestureDetector(
                                 onTap: () {
-                                  chatroomAvatarUrl = ((documentSnapshot.data()
-                                      as dynamic)['icon']);
+                                  chatroomAvatarUrl = documentSnapshot.get('icon');
                                   notifyListeners();
                                 },
                                 child: Padding(
@@ -195,14 +197,13 @@ class ChatroomHelper with ChangeNotifier {
                                         shape: BoxShape.circle,
                                         border: Border.all(
                                             color: chatroomAvatarUrl ==
-                                                    ((documentSnapshot.data()
-                                                        as dynamic)['icon'])
+                                                    (documentSnapshot.get('icon'))
                                                 ? constantColors.blueColor
                                                 : constantColors.transperant)),
                                     height: 10.0,
                                     width: 40.0,
-                                    child: Image.network((documentSnapshot
-                                        .data() as dynamic)['icon']),
+                                    child: Image.network(documentSnapshot
+                                        .get('icon')),
                                   ),
                                 ),
                               );
@@ -311,7 +312,7 @@ class ChatroomHelper with ChangeNotifier {
                 onLongPress: () {
                   showChatroomDetails(context, documentSnapshot);
                 },
-                title: Text((documentSnapshot.data() as dynamic)['roomname'],
+                title: Text(documentSnapshot.get('roomname'),
                     style: TextStyle(
                         color: constantColors.whiteColor,
                         fontSize: 16.0,
@@ -327,7 +328,7 @@ class ChatroomHelper with ChangeNotifier {
                 leading: CircleAvatar(
                   backgroundColor: constantColors.transperant,
                   backgroundImage: NetworkImage(
-                      (documentSnapshot.data() as dynamic)['roomavatar']),
+                      documentSnapshot.get('roomavatar')),
                 ),
               );
             }).toList());

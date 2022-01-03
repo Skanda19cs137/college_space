@@ -117,39 +117,12 @@ class GroupMessageHelper with ChangeNotifier {
                                               ],
                                             ),
                                           ),
-                                          (documentSnapshot.data()
-                                                      as dynamic)['message'] !=
-                                                  null
-                                              ? Text(
-                                                  (documentSnapshot.data()
-                                                      as dynamic)['message'],
-                                                  style: TextStyle(
-                                                    color: constantColors
-                                                        .whiteColor,
-                                                    fontSize: 14.0,
-                                                  ),
-                                                )
-                                              : Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 8.0),
-                                                  child: Container(
-                                                    height: 90,
-                                                    width: 100,
-                                                    child: Image.network(
-                                                        (documentSnapshot.data()
-                                                                as dynamic)[
-                                                            'sticker']),
-                                                  ),
-                                                ),
-                                          Container(
-                                            width: 80.0,
-                                            child: Text(
-                                              getLastMessageTime,
-                                              style: TextStyle(
-                                                  color:
-                                                      constantColors.whiteColor,
-                                                  fontSize: 8.0),
+                                          Text(
+                                            (documentSnapshot.data()
+                                                as dynamic)['message'],
+                                            style: TextStyle(
+                                              color: constantColors.whiteColor,
+                                              fontSize: 14.0,
                                             ),
                                           )
                                         ],

@@ -11,17 +11,41 @@ class Authentication with ChangeNotifier
   String get getUserUid => userUid;
 
   Future logIntoAccount(String email, String password) async{
-    UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-    User user= userCredential.user;
-    userUid= user.uid;
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      userUid= FirebaseAuth.instance.currentUser.uid;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+
     print(userUid);
     notifyListeners();
   }
 
   Future createAccount(String email, String password) async{
-    UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-    User user= userCredential.user;
-    userUid= user.uid;
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      userUid= FirebaseAuth.instance.currentUser.uid;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+
     print(userUid);
     notifyListeners();
   }
