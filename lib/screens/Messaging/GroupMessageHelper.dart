@@ -8,9 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class GroupMessageHelper with ChangeNotifier {
   bool hasMemberJoined = false;
+  String lastMessageTime;
+  String get getLastMessageTime => lastMessageTime;
   bool get getHasMemmberJoined => hasMemberJoined;
   final ConstantColors constantColors = ConstantColors();
   showMessages(BuildContext context, DocumentSnapshot documentSnapshot,
@@ -30,11 +33,16 @@ class GroupMessageHelper with ChangeNotifier {
                 reverse: true,
                 children: snapshot.data.docs
                     .map(((DocumentSnapshot documentSnapshot) {
+                  showLastMessageTime(
+                      (documentSnapshot.data() as dynamic)['time']);
                   return Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.15,
+                      height: (documentSnapshot.data() as dynamic)['message'] !=
+                              null
+                          ? MediaQuery.of(context).size.height * 0.125
+                          : MediaQuery.of(context).size.height * 0.2,
                       child: Stack(
                         children: [
                           Padding(
@@ -46,12 +54,20 @@ class GroupMessageHelper with ChangeNotifier {
                                   padding: const EdgeInsets.all(3.0),
                                   child: Container(
                                     constraints: BoxConstraints(
-                                      maxHeight:
-                                          MediaQuery.of(context).size.height *
-                                              0.1,
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.8,
+                                      maxHeight: (documentSnapshot.data()
+                                                  as dynamic)['message'] !=
+                                              null
+                                          ? MediaQuery.of(context).size.height *
+                                              0.1
+                                          : MediaQuery.of(context).size.height *
+                                              0.42,
+                                      maxWidth: (documentSnapshot.data()
+                                                  as dynamic)['message'] !=
+                                              null
+                                          ? MediaQuery.of(context).size.width *
+                                              0.8
+                                          : MediaQuery.of(context).size.width *
+                                              0.9,
                                     ),
                                     child: Padding(
                                       padding:
@@ -101,12 +117,39 @@ class GroupMessageHelper with ChangeNotifier {
                                               ],
                                             ),
                                           ),
-                                          Text(
-                                            (documentSnapshot.data()
-                                                as dynamic)['message'],
-                                            style: TextStyle(
-                                              color: constantColors.whiteColor,
-                                              fontSize: 14.0,
+                                          (documentSnapshot.data()
+                                                      as dynamic)['message'] !=
+                                                  null
+                                              ? Text(
+                                                  (documentSnapshot.data()
+                                                      as dynamic)['message'],
+                                                  style: TextStyle(
+                                                    color: constantColors
+                                                        .whiteColor,
+                                                    fontSize: 14.0,
+                                                  ),
+                                                )
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
+                                                  child: Container(
+                                                    height: 90,
+                                                    width: 100,
+                                                    child: Image.network(
+                                                        (documentSnapshot.data()
+                                                                as dynamic)[
+                                                            'sticker']),
+                                                  ),
+                                                ),
+                                          Container(
+                                            width: 80.0,
+                                            child: Text(
+                                              getLastMessageTime,
+                                              style: TextStyle(
+                                                  color:
+                                                      constantColors.whiteColor,
+                                                  fontSize: 8.0),
                                             ),
                                           )
                                         ],
@@ -291,5 +334,116 @@ class GroupMessageHelper with ChangeNotifier {
             ],
           );
         });
+  }
+
+  showSticker(BuildContext context, String chatroomid) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return AnimatedContainer(
+            duration: Duration(seconds: 1),
+            curve: Curves.easeIn,
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 105.0),
+                  child: Divider(
+                    thickness: 4,
+                    color: constantColors.whiteColor,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border:
+                                Border.all(color: constantColors.blueColor)),
+                        height: 30,
+                        width: 30,
+                        /*
+                        Used Random Asset Has to Change
+                         */
+                        child: Image.asset('assets/images/sticker.jpg'),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  width: MediaQuery.of(context).size.width,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('stickers')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return new Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return new GridView(
+                            children: snapshot.data.docs
+                                .map((DocumentSnapshot documentSnapshot) {
+                              return GestureDetector(
+                                onTap: () {
+                                  sendStickers(
+                                      context,
+                                      (documentSnapshot.data()
+                                          as dynamic)['image'],
+                                      chatroomid);
+                                },
+                                child: Container(
+                                    height: 40.0,
+                                    width: 40.0,
+                                    child: Image.network((documentSnapshot
+                                        .data() as dynamic)['image'])),
+                              );
+                            }).toList(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3));
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: constantColors.darkColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0))),
+          );
+        });
+  }
+
+  sendStickers(
+      BuildContext context, String stickerImageUrl, String chatRoomId) async {
+    await FirebaseFirestore.instance
+        .collection('chatrooms')
+        .doc(chatRoomId)
+        .collection('messages')
+        .add({
+      'sticker': stickerImageUrl,
+      'username': Provider.of<FirebaseOperations>(context, listen: false)
+          .getInitUserName,
+      'userimage': Provider.of<FirebaseOperations>(context, listen: false)
+          .getInitUserImage,
+      'time': Timestamp.now()
+    });
+  }
+
+  showLastMessageTime(dynamic timeData) {
+    Timestamp time = timeData;
+    DateTime dateTime = time.toDate();
+    lastMessageTime = timeago.format(dateTime);
+    print(lastMessageTime);
+    notifyListeners();
   }
 }

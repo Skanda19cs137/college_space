@@ -44,6 +44,7 @@ class _GroupMessageState extends State<GroupMessage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: constantColors.darkColor,
       appBar: AppBar(
         actions: [
           Provider.of<Authentication>(context, listen: false).getUserUid ==
@@ -101,21 +102,27 @@ class _GroupMessageState extends State<GroupMessage> {
                           fontSize: 16.0),
                     ),
                     StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance.collection('chatrooms').doc(widget.documentSnapshot.id).collection('members').snapshots(),
-                        builder:(context,snapshot){
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator(),);
-                          }
-                          else{
-                            return new Text('${snapshot.data.docs.length.toString()}',
-                                style: TextStyle(
-                                    color: constantColors.greyColor.withOpacity(0.75),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12.0)
+                        stream: FirebaseFirestore.instance
+                            .collection('chatrooms')
+                            .doc(widget.documentSnapshot.id)
+                            .collection('members')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: CircularProgressIndicator(),
                             );
+                          } else {
+                            return new Text(
+                                '${snapshot.data.docs.length.toString()}',
+                                style: TextStyle(
+                                    color: constantColors.greyColor
+                                        .withOpacity(0.75),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12.0));
                           }
-                        }
-                    )
+                        })
                   ],
                 ),
               ),
@@ -145,6 +152,12 @@ class _GroupMessageState extends State<GroupMessage> {
                     child: Row(
                       children: [
                         GestureDetector(
+                          onTap: () {
+                            Provider.of<GroupMessageHelper>(context,
+                                    listen: false)
+                                .showSticker(
+                                    context, widget.documentSnapshot.id);
+                          },
                           child: CircleAvatar(
                             radius: 18.0,
                             backgroundColor: constantColors.transperant,
