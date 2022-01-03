@@ -45,14 +45,14 @@ class FirebaseOperations with ChangeNotifier {
 
   Future initUserData(BuildContext context) async {
     return FirebaseFirestore.instance
-        .collection('user')
+        .collection('users')
         .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
         .get()
         .then((doc) {
       print("Fetching user data");
       initUserName = doc.data()['username'];
-      initUserName = doc.data()['useremail'];
-      initUserName = doc.data()['userimage'];
+      initUserEmail = doc.data()['useremail'];
+      initUserImage = doc.data()['userimage'];
       notifyListeners();
     });
   }
@@ -68,7 +68,17 @@ class FirebaseOperations with ChangeNotifier {
         .set(chatroomData);
   }
 
-  Future deleteUserData(String userUid) async {
-    return FirebaseFirestore.instance.collection('users').doc(userUid).delete();
+  Future deleteUserData(String userUid, dynamic collection) async {
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .doc(userUid)
+        .delete();
+  }
+
+  Future updateCaption(String postId, dynamic data) async {
+    return FirebaseFirestore.instance
+        .collection('post')
+        .doc(postId)
+        .update(data);
   }
 }

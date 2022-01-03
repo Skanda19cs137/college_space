@@ -96,7 +96,7 @@ class LandingService with ChangeNotifier {
                 child: CircularProgressIndicator(),
               );
             } else {
-              return new ListView(
+              return ListView(
                 children:
                     snapshot.data.docs.map((DocumentSnapshot documentSnapshot) {
                   return ListTile(
@@ -155,7 +155,7 @@ class LandingService with ChangeNotifier {
                               Provider.of<FirebaseOperations>(context,
                                       listen: false)
                                   .deleteUserData((documentSnapshot.data()
-                                      as dynamic)['useruid']);
+                                      as dynamic)['useruid'],'users');
                             },
                           ),
                         ],
@@ -366,7 +366,7 @@ class LandingService with ChangeNotifier {
                                     .getUserUid,
                                 'useremail': userEmailController.text,
                                 'username': userNameController.text,
-                                'userImage': Provider.of<LandingUtils>(context,
+                                'userimage': Provider.of<LandingUtils>(context,
                                         listen: false)
                                     .getUserAvatarUrl,
                               });

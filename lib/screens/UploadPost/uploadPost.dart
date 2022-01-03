@@ -267,7 +267,7 @@ class UploadPost with ChangeNotifier {
                       'username': Provider.of<FirebaseOperations>(context,
                               listen: false)
                           .getInitUserName,
-                      'userImage': Provider.of<FirebaseOperations>(context,
+                      'userimage': Provider.of<FirebaseOperations>(context,
                               listen: false)
                           .getInitUserImage,
                       'useruid':
