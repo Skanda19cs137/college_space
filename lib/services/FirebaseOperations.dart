@@ -12,11 +12,11 @@ import 'package:provider/provider.dart';
 class FirebaseOperations with ChangeNotifier {
   UploadTask imageUploadTask;
   String initUserEmail;
-  get getInitUserName => null;
+  get getInitUserName => initUserName;
   String initUserName;
-  get getInitUserEmail => null;
+  get getInitUserEmail => initUserEmail;
   String initUserImage;
-  get getInitUserImage => null;
+  get getInitUserImage => initUserImage;
 
   Future uploadUserAvatar(BuildContext context) async {
     Reference imageReference = FirebaseStorage.instance.ref().child(
@@ -80,5 +80,13 @@ class FirebaseOperations with ChangeNotifier {
         .collection('post')
         .doc(postId)
         .update(data);
+  }
+
+  Future addAward(String postId, dynamic data) async {
+    return FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('awards')
+        .add(data);
   }
 }
