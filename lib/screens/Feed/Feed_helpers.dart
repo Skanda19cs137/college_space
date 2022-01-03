@@ -55,7 +55,10 @@ class FeedHelpers with ChangeNotifier {
         padding: const EdgeInsets.only(top: 8.0),
         child: Container(
           child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection('posts')
+                .orderBy('time', descending: true)
+                .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
@@ -86,6 +89,9 @@ class FeedHelpers with ChangeNotifier {
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
     return ListView(
       children: snapshot.data.docs.map((DocumentSnapshot documentSnapshot) {
+        Provider.of<PostFunctions>(context, listen: false)
+            .showTimeAgo((documentSnapshot.data() as dynamic)['time']);
+
         return Container(
           height: MediaQuery.of(context).size.height * 0.7,
           width: MediaQuery.of(context).size.width,
@@ -133,7 +139,9 @@ class FeedHelpers with ChangeNotifier {
                                       fontWeight: FontWeight.bold),
                                   children: <TextSpan>[
                                     TextSpan(
-                                        text: '12 hrs ago',
+                                        text: ',${
+                                        Provider. of<PostFunctions>(context,listen:false).getImageTimePosted.toString()
+                                        }',
                                         style: TextStyle(
                                             color: constantColors.lightColor))
                                   ]),
@@ -141,7 +149,37 @@ class FeedHelpers with ChangeNotifier {
                           ],
                         ),
                       ),
-                    )
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('post')
+                              .doc((documentSnapshot.data()
+                                  as dynamic)['caption'])
+                              .collection('awards')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else {
+                              return ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: snapshot.data.docs
+                                    .map((DocumentSnapshot documentSnapshot) {
+                                  return Container(
+                                    height: 30.0,
+                                    width: 30.0,
+                                    child: Image.network((documentSnapshot
+                                        .data() as dynamic)['award']),
+                                  );
+                                }).toList(),
+                              );
+                            }
+                          }),
+                    ),
                   ],
                 ),
               ),
@@ -156,7 +194,7 @@ class FeedHelpers with ChangeNotifier {
                         ? Image.network(
                             documentSnapshot.get('postimage'),
                             scale: 2)
-                        : AssetImage('assets/images/empty.png'),
+                        : const AssetImage('assets/images/empty.png'),
                   ),
                 ),
               ),
@@ -325,7 +363,9 @@ class FeedHelpers with ChangeNotifier {
                                 EvaIcons.moreVertical,
                                 color: constantColors.whiteColor,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Provider.of<PostFunctions>(context,listen: false).showPostOption(context,(documentSnapshot.data() as dynamic)['caption']);
+                              },
                             )
                           : Container(
                               width: 0.0,

@@ -68,8 +68,18 @@ class FirebaseOperations with ChangeNotifier {
         .set(chatroomData);
   }
 
-  Future deleteUserData(String userUid) async {
-    return FirebaseFirestore.instance.collection('users').doc(userUid).delete();
+  Future deleteUserData(String userUid, dynamic collection) async {
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .doc(userUid)
+        .delete();
+  }
+
+  Future updateCaption(String postId, dynamic data) async {
+    return FirebaseFirestore.instance
+        .collection('post')
+        .doc(postId)
+        .update(data);
   }
 
   Future addAward(String postId, dynamic data) async {
