@@ -270,10 +270,33 @@ class UploadPost with ChangeNotifier {
                       'useruid':Provider.of<Authentication>(context, listen: false).getUserUid,
                       'time': Timestamp.now(),
                       'useremail': Provider.of<FirebaseOperations>(context,listen: false).getInitUserEmail,
+                    }).whenComplete(() async {
+                      // Add Data UnderUser Profile
+                      return FirebaseFirestore.instance.collection('users').doc(
+                        Provider.of<Authentication>(context,listen: false).getUserUid
+                      ).collection('posts').add({
+                        'postimage': getUploadPostImageUrl,
+                        'caption': captionController.text,
+                        'username': Provider
+                            .of<FirebaseOperations>(context, listen: false)
+                            .getInitUserName,
+                        'userimage': Provider
+                            .of<FirebaseOperations>(context, listen: false)
+                            .getInitUserImage,
+                        'useruid': Provider
+                            .of<Authentication>(context, listen: false)
+                            .getUserUid,
+                        'time': Timestamp.now(),
+                        'useremail': Provider
+                            .of<FirebaseOperations>(context, listen: false)
+                            .getInitUserEmail,
+                      });
                     }).whenComplete(() {
                       Navigator.pop(context);
                     });
+
                   },
+                  color: constantColors.blueColor,
                 ),
               ],
             ),

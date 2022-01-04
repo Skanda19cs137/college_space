@@ -1,4 +1,5 @@
 import 'package:college_space/constants/Constantcolors.dart';
+import 'package:college_space/screens/AltProfile/alt_profile_helper.dart';
 import 'package:college_space/screens/Chatroom/ChatroomHelper.dart';
 import 'package:college_space/screens/Feed/Feed_helpers.dart';
 import 'package:college_space/screens/Homepage/HomePageHelpers.dart';
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
               canvasColor: Colors.transparent, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: constantColors.blueColor)),
         ),
         providers: [
+          ChangeNotifierProvider(create: (_) => AltProfileHelper()),
           ChangeNotifierProvider(create: (_) => PostFunctions()),
           ChangeNotifierProvider(create: (_) => HomepageHelpers()),
           ChangeNotifierProvider(create: (_) => LandingUtils()),
@@ -61,3 +63,6 @@ class _MyAppState extends State<MyApp> {
         ]);
   }
 }
+
+
+
