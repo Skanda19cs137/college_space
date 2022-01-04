@@ -263,9 +263,9 @@ class GroupMessageHelper with ChangeNotifier {
       'message': messageController.text,
       'time': Timestamp.now(),
       'useruid': Provider.of<Authentication>(context, listen: false).getUserUid,
-      'useruid': Provider.of<FirebaseOperations>(context, listen: false)
+      'username': Provider.of<FirebaseOperations>(context, listen: false)
           .getInitUserName,
-      'useruid': Provider.of<FirebaseOperations>(context, listen: false)
+      'userimage': Provider.of<FirebaseOperations>(context, listen: false)
           .getInitUserImage,
     });
   }
