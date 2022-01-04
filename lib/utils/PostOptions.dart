@@ -140,7 +140,7 @@ class PostFunctions with ChangeNotifier {
                                       onPressed: () {
                                         Provider.of<FirebaseOperations>(context,
                                                 listen: false)
-                                            .deleteUserData(postId, 'post')
+                                            .deleteUserData(postId, 'posts')
                                             .whenComplete(
                                                 () => Navigator.pop(context));
                                       },

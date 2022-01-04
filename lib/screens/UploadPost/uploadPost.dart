@@ -155,6 +155,7 @@ class UploadPost with ChangeNotifier {
                             //     print('Image uploaded!');};
                             // }
                             editPostSheet(context);
+                            Navigator.pop(context);
                           });
                         })
                   ],
