@@ -1,6 +1,4 @@
-import 'dart:html';
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_space/constants/Constantcolors.dart';
 import 'package:college_space/screens/AltProfile/alt_profile.dart';
@@ -9,6 +7,7 @@ import 'package:college_space/services/FirebaseOperations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -243,7 +242,7 @@ class PostFunctions with ChangeNotifier {
         child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('posts')
-            .doc(postId)
+            .doc(postID)
             .collection('awards')
             .orderBy('time')
             .snapshots(),
@@ -263,13 +262,13 @@ class PostFunctions with ChangeNotifier {
                         context,
                         PageTransition(
                             child: AltProfile(
-                              userUid: documentSnapshot.data()['useruid'],
+                              userUid: documentSnapshot.get('useruid'),
                             ),
                             type: PageTransitionType.bottomToTop));
                   },
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(
-                      documentSnapshot.data()['userimage']
+                      documentSnapshot.get('userimage')
                     ),
                     radius: 15.0,
                     backgroundColor: constantColors.darkColor,
@@ -293,9 +292,8 @@ class PostFunctions with ChangeNotifier {
                     ),
                     onPressed: () {},
                     color: constantColors.blueColor),
-                title: Text(
-                  documentSnapshot.data()['username'],
-                  style: Textstyle(
+                title: Text(documentSnapshot.get('username'),
+                    style: TextStyle(
                     color: constantColors.blueColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0),
@@ -393,7 +391,7 @@ class PostFunctions with ChangeNotifier {
                                                     context,
                                                     PageTransition(
                                                         child: AltProfile(
-                                                          userUid: documentSnapshot.data()['useruid'],
+                                                          userUid: documentSnapshot.get('useruid'),
                                                         ),
                                                         type: PageTransitionType.bottomToTop));
                                               },
@@ -427,7 +425,7 @@ class PostFunctions with ChangeNotifier {
                                                       FontAwesomeIcons.arrowUp,
                                                       color: constantColors
                                                           .blueColor,
-                                                      size: 14.0,
+                                                      size: 12.0,
                                                     ),
                                                     onPressed: () {}),
                                                 Text(
@@ -452,11 +450,17 @@ class PostFunctions with ChangeNotifier {
                                         ],
                                       ),
                                       Container(
+                                        constraints: BoxConstraints(
+                                          maxWidth: MediaQuery.of(context).size.width*0.95
+                                        ),
                                         width:
-                                            MediaQuery.of(context).size.width,
+                                            MediaQuery.of(context).size.width*0.95,
                                         child: Row(
                                           children: [
                                             IconButton(
+                                              constraints: BoxConstraints(
+                                                maxWidth: 25.0
+                                              ),
                                                 icon: Icon(
                                                   Icons
                                                       .arrow_forward_ios_outlined,
@@ -466,24 +470,28 @@ class PostFunctions with ChangeNotifier {
                                                 ),
                                                 onPressed: () {}),
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.75,
+                                              constraints: BoxConstraints(
+                                                maxWidth: MediaQuery.of(context).size.width*0.6
+                                              ),
+
                                               child: Text(
                                                 documentSnapshot.get('comment'),
                                                 style: TextStyle(
                                                     color: constantColors
                                                         .whiteColor,
-                                                    fontSize: 16.0),
+                                                    fontSize: 14.0),
                                               ),
                                             ),
                                             IconButton(
+
+                                              constraints: BoxConstraints(
+                                                maxWidth: 25.0
+                                              ),
                                                 icon: Icon(
                                                     FontAwesomeIcons.trashAlt,
                                                     color:
                                                         constantColors.redColor,
-                                                    size: 16),
+                                                    size: 12),
                                                 onPressed: () {}),
                                           ],
                                         ),
@@ -496,12 +504,10 @@ class PostFunctions with ChangeNotifier {
                           },
                         )),
                     Container(
-                      /* color: constantColors.redColor,*/
-                      width: 400,
+
                       height: 50.0,
-                      /*
                       width: MediaQuery.of(context).size.width,
-                      */
+
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -604,7 +610,7 @@ class PostFunctions with ChangeNotifier {
                                     context,
                                     PageTransition(
                                     child: AltProfile(
-                                        userUid: documentSnapshot.data()['useruid'],
+                                        userUid: documentSnapshot.get('useruid'),
                                     ),
                                     type: PageTransitionType.bottomToTop));
                               },

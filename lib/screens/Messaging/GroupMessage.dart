@@ -23,28 +23,26 @@ class GroupMessage extends StatefulWidget {
 
 class _GroupMessageState extends State<GroupMessage> {
   final ConstantColors constantColors = ConstantColors();
-
   final TextEditingController messageController = TextEditingController();
-  void initstate(){
-    Provider.of<FirebaseOperations>(context,listen: false).initUserData(context);
-    super.initState();
-  }
   @override
   void initState() {
+    Provider.of<FirebaseOperations>(context,listen: false).initUserData(context);
     Provider.of<GroupMessageHelper>(context, listen: false)
         .checkIfJoined(context, widget.documentSnapshot.id,
             widget.documentSnapshot.get('useruid'))
         .whenComplete(() async {
       if (Provider.of<GroupMessageHelper>(context, listen: false)
-          .getHasMemmberJoined) {
+          .getHasMemberJoined == false) {
         Timer(
-            Duration(microseconds: 10),
+            Duration(microseconds: 1000),
             () => Provider.of<GroupMessageHelper>(context, listen: false)
                 .askToJoin(context, widget.documentSnapshot.id));
       }
     });
+
     super.initState();
   }
+
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -166,31 +164,32 @@ class _GroupMessageState extends State<GroupMessage> {
                                     context, widget.documentSnapshot.id);
                           },
                           child: CircleAvatar(
-                            radius: 18.0,
+                            radius: MediaQuery.of(context).size.width * 0.05,
                             backgroundColor: constantColors.transperant,
                             backgroundImage:
-                                AssetImage('assets/icons/sunflower.png'),
+                                AssetImage('assets/images/sunflower.png'),
                           ),
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.75,
+                          width: MediaQuery.of(context).size.width * 0.7,
                           child: TextField(
                             controller: messageController,
                             style: TextStyle(
                                 color: constantColors.whiteColor,
-                                fontSize: 16.0,
+                                fontSize: 14.0,
                                 fontWeight: FontWeight.bold),
                             decoration: InputDecoration(
                               hintText: 'Type Message',
                               hintStyle: TextStyle(
                                   color:
                                       constantColors.greyColor.withOpacity(0.5),
-                                  fontSize: 16.0,
+                                  fontSize: 14.0,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                         FloatingActionButton(
+                            mini: true,
                             backgroundColor: constantColors.greenColor,
                             child: Icon(
                               Icons.send_rounded,

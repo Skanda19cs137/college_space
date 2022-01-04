@@ -286,13 +286,13 @@ class FeedHelpers with ChangeNotifier {
                       Container(
                         width: 80.0,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
                               onLongPress: (){
                                 Provider.of<PostFunctions>(context,
-                                        listen: false)showAwardsPresenter(context,
-                                                documentSnapshot.data()['caption']);
+                                        listen: false).showAwardsPresenter(context,
+                                                documentSnapshot.get('caption'));
                                 },
                               onTap: () {
                                 Provider.of<PostFunctions>(context,

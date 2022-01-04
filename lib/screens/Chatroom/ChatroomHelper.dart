@@ -416,7 +416,7 @@ class ChatroomHelper with ChangeNotifier {
                   width: 0.0,
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection('chatroom')
+                        .collection('chatrooms')
                         .doc(documentSnapshot.id)
                         .collection('messages')
                         .orderBy('time', descending: true)
@@ -445,7 +445,7 @@ class ChatroomHelper with ChangeNotifier {
                         fontWeight: FontWeight.bold)),
                 subtitle: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('chatroom')
+                      .collection('chatrooms')
                       .doc(documentSnapshot.id)
                       .collection('messages')
                       .orderBy('time', descending: true)
