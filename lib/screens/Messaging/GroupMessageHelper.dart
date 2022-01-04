@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:universal_html/html.dart';
 
 class GroupMessageHelper with ChangeNotifier {
   bool hasMemberJoined = false;
@@ -16,6 +17,55 @@ class GroupMessageHelper with ChangeNotifier {
   String get getLastMessageTime => lastMessageTime;
   bool get getHasMemmberJoined => hasMemberJoined;
   final ConstantColors constantColors = ConstantColors();
+
+  leaveTheRoom(BuildContext context,String chatRoomName){
+    return showDialog(context: context, builder: (contest){
+      return AlertDialog(
+        backgroundColor: constantColors.darkColor,
+        title: Text('Leave $chatRoomName ?',style: TextStyle(
+            color: constantColors.whiteColor,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          MaterialButton(
+      child: Text(
+    'No',
+    style: TextStyle(
+        color: constantColors.whiteColor,
+        fontSize: 14.0,
+        fontWeight: FontWeight.bold,
+    decoration: TextDecoration.underline,
+    decorationColor: constantColors.whiteColor),
+  ),
+      onPressed: (){
+        Navigator.pop(context);
+      }),
+          MaterialButton(
+            color: constantColors.redColor,
+              child: Text(
+                'Yes',
+                style: TextStyle(
+                    color: constantColors.whiteColor,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold),
+              ),
+              onPressed: (){
+                FirebaseFirestore.instance.collection('chatrooms').doc(
+                 chatRoomName
+                ).collection('members').doc(
+                  Provider.of<Authentication>(context,listen: false).getUserUid
+                ).delete().whenComplete((){
+                Navigator.pushReplacement(context,PageTransition(child: Homepage(), type: PageTransitionType.bottomToTop) );
+
+              });
+                }),
+        ],
+      );
+    });
+  }
+
+
   showMessages(BuildContext context, DocumentSnapshot documentSnapshot,
       String adminUserUid) {
     return StreamBuilder<QuerySnapshot>(

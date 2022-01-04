@@ -47,7 +47,6 @@ dependencies:
   http:
   universal_html: ^2.0.8
   lottie: ^1.2.1
-  timeago:
 
   timeago: ^2.0.29
 
