@@ -8,8 +8,9 @@ class Authentication with ChangeNotifier
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   String userUid;
-  String get getUserUid => userUid;
-
+  String get getUserUid {
+    return userUid;
+  }
   Future logIntoAccount(String email, String password) async{
     try {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(

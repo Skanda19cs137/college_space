@@ -5,6 +5,7 @@ import 'package:college_space/constants/Constantcolors.dart';
 import 'package:college_space/screens/Homepage/Homepage.dart';
 import 'package:college_space/screens/Messaging/GroupMessageHelper.dart';
 import 'package:college_space/services/Authentication.dart';
+import 'package:college_space/services/FirebaseOperations.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,10 @@ class _GroupMessageState extends State<GroupMessage> {
   final ConstantColors constantColors = ConstantColors();
 
   final TextEditingController messageController = TextEditingController();
-
+  void initstate(){
+    Provider.of<FirebaseOperations>(context,listen: false).initUserData(context);
+    super.initState();
+  }
   @override
   void initState() {
     Provider.of<GroupMessageHelper>(context, listen: false)
@@ -134,6 +138,7 @@ class _GroupMessageState extends State<GroupMessage> {
       ),
       body: SingleChildScrollView(
         child: Container(
+          color: constantColors.darkColor,
           child: Column(
             children: [
               AnimatedContainer(
@@ -146,7 +151,7 @@ class _GroupMessageState extends State<GroupMessage> {
                 width: MediaQuery.of(context).size.width,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+                padding: const EdgeInsets.only(left: 4.0),
                 child: Padding(
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),

@@ -69,6 +69,7 @@ class GroupMessageHelper with ChangeNotifier {
   showMessages(BuildContext context, DocumentSnapshot documentSnapshot,
       String adminUserUid) {
     return StreamBuilder<QuerySnapshot>(
+
         stream: FirebaseFirestore.instance
             .collection('chatrooms')
             .doc(documentSnapshot.id)
@@ -80,6 +81,7 @@ class GroupMessageHelper with ChangeNotifier {
             return Center(child: CircularProgressIndicator());
           } else {
             return ListView(
+
                 reverse: true,
                 children: snapshot.data.docs
                     .map(((DocumentSnapshot documentSnapshot) {
@@ -88,6 +90,7 @@ class GroupMessageHelper with ChangeNotifier {
                   return Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Container(
+                      color: constantColors.darkColor,
                       width: MediaQuery.of(context).size.width,
                       height: (documentSnapshot.data() as dynamic)['message'] !=
                               null

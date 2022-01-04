@@ -83,7 +83,7 @@ class ChatroomHelper with ChangeNotifier {
                                   //     PageTransition(child: AltProfile(
                                   //       useruid:documentSnapshot.data()['useruid']
                                   //     ),
-                                  //         type: PageTransitionType.rotate)
+                                  //         type: PageTransitionType.bottomToTop)
                                   //   );
                                   // }
                                 },
@@ -407,7 +407,7 @@ class ChatroomHelper with ChangeNotifier {
                           child: GroupMessage(
                             documentSnapshot: documentSnapshot,
                           ),
-                          type: PageTransitionType.scale));
+                          type: PageTransitionType.bottomToTop));
                 },
                 onLongPress: () {
                   showChatroomDetails(context, documentSnapshot);

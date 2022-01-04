@@ -15,6 +15,7 @@ class FeedHelpers with ChangeNotifier {
 
   Widget feedAppBar(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: constantColors.darkColor.withOpacity(0.6),
       centerTitle: true,
       actions: [
@@ -35,7 +36,7 @@ class FeedHelpers with ChangeNotifier {
                 fontFamily: 'Poppins',
                 color: constantColors.whiteColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 30.0),
+                fontSize: 20.0),
             children: <TextSpan>[
               TextSpan(
                   text: 'Feed',
@@ -43,7 +44,7 @@ class FeedHelpers with ChangeNotifier {
                       fontFamily: 'Poppins',
                       color: constantColors.blueColor,
                       fontWeight: FontWeight.bold,
-                      fontSize: 34.0))
+                      fontSize: 25.0))
             ]),
       ),
     );

@@ -15,9 +15,33 @@ class FirebaseOperations with ChangeNotifier {
   String initUserEmail;
   String initUserName;
   String initUserImage;
-  String get getInitUserName=>initUserName;
-  String get getInitUserEmail=> initUserEmail;
-  String get getInitUserImage =>initUserImage;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  String get getInitUserName {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseAuth.currentUser.uid)
+        .get()
+      ..then((docu) {
+        initUserName = docu.data()['username'];
+      });
+    return initUserName;
+  }
+
+  String get getInitUserEmail {
+    return firebaseAuth.currentUser.email;
+  }
+
+  String get getInitUserImage {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseAuth.currentUser.uid)
+        .get()
+      ..then((doc) {
+        initUserImage = doc.data()['userimage'];
+      });
+    return initUserImage;
+  }
+
   Future uploadUserAvatar(BuildContext context) async {
     Reference imageReference = FirebaseStorage.instance.ref().child(
         'userProfileAvatar/${Provider.of<LandingUtils>(context, listen: false).getUserAvatar.path}/${TimeOfDay.now()}');
@@ -44,9 +68,10 @@ class FirebaseOperations with ChangeNotifier {
   }
 
   Future initUserData(BuildContext context) async {
+    String uid = Provider.of<Authentication>(context, listen: false).getUserUid;
     return FirebaseFirestore.instance
         .collection('users')
-        .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
+        .doc(uid)
         .get()
         .then((doc) {
       print("Fetching user data");
