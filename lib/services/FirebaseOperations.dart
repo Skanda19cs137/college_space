@@ -83,7 +83,7 @@ class FirebaseOperations with ChangeNotifier {
   }
 
   Future uploadPostData(String postId, dynamic data) async {
-    return FirebaseFirestore.instance.collection('post').doc(postId).set(data);
+    return FirebaseFirestore.instance.collection('posts').doc(postId).set(data);
   }
 
   Future submitChatroomData(String chatroomName, dynamic chatroomData) async {
@@ -102,7 +102,7 @@ class FirebaseOperations with ChangeNotifier {
 
   Future updateCaption(String postId, dynamic data) async {
     return FirebaseFirestore.instance
-        .collection('post')
+        .collection('posts')
         .doc(postId)
         .update(data);
   }
