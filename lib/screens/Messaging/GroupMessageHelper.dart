@@ -14,8 +14,10 @@ import 'package:timeago/timeago.dart' as timeago;
 class GroupMessageHelper with ChangeNotifier {
   bool hasMemberJoined = false;
   String lastMessageTime;
-  String get getLastMessageTime => lastMessageTime;
-  bool get getHasMemmberJoined => hasMemberJoined;
+  String get getLastMessageTime {
+    return lastMessageTime;
+  }
+  bool get getHasMemberJoined {return hasMemberJoined;}
   final ConstantColors constantColors = ConstantColors();
 
   leaveTheRoom(BuildContext context,String chatRoomName){
@@ -100,27 +102,22 @@ class GroupMessageHelper with ChangeNotifier {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(left: 60.0, top: 20.0),
+                                const EdgeInsets.only(left: 60.0, top: 7.0),
                             child: Row(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(3.0),
                                   child: Container(
                                     constraints: BoxConstraints(
+                                      minHeight: MediaQuery.of(context).size.height*0.23,
                                       maxHeight: (documentSnapshot.data()
                                                   as dynamic)['message'] !=
                                               null
                                           ? MediaQuery.of(context).size.height *
-                                              0.1
+                                              0.3
                                           : MediaQuery.of(context).size.height *
-                                              0.42,
-                                      maxWidth: (documentSnapshot.data()
-                                                  as dynamic)['message'] !=
-                                              null
-                                          ? MediaQuery.of(context).size.width *
-                                              0.8
-                                          : MediaQuery.of(context).size.width *
-                                              0.9,
+                                              0.7,
+                                      maxWidth: MediaQuery.of(context).size.width *0.8,
                                     ),
                                     child: Padding(
                                       padding:
@@ -156,8 +153,7 @@ class GroupMessageHelper with ChangeNotifier {
                                                                     .only(
                                                                 left: 8.0),
                                                         child: Icon(
-                                                          FontAwesomeIcons
-                                                              .chessKing,
+                                                          Icons.verified_rounded,
                                                           color: constantColors
                                                               .lightBlueColor,
                                                           size: 12.0,
@@ -199,6 +195,8 @@ class GroupMessageHelper with ChangeNotifier {
                             ),
                           ),
                           Positioned(
+                            top: 0.0,
+                              left: 10.0,
                               child: Provider.of<Authentication>(context,
                                               listen: false)
                                           .getUserUid ==
@@ -211,14 +209,14 @@ class GroupMessageHelper with ChangeNotifier {
                                               icon: Icon(
                                                 Icons.edit,
                                                 color: constantColors.blueColor,
-                                                size: 16.0,
+                                                size: 14.0,
                                               ),
                                               onPressed: () {}),
                                           IconButton(
                                               icon: Icon(Icons.delete_rounded,
                                                   color:
                                                       constantColors.redColor,
-                                                  size: 16.0),
+                                                  size: 14.0),
                                               onPressed: () {})
                                         ],
                                       ),
@@ -228,7 +226,7 @@ class GroupMessageHelper with ChangeNotifier {
                                       height: 0.0,
                                     )),
                           Positioned(
-                              left: 40.0,
+                              left: 30.0,
                               child: Provider.of<Authentication>(context,
                                               listen: false)
                                           .getUserUid ==
@@ -274,7 +272,7 @@ class GroupMessageHelper with ChangeNotifier {
       String chatroomAdminUid) async {
     return FirebaseFirestore.instance
         .collection('chatrooms')
-        .doc('chatroomName')
+        .doc(chatroomName)
         .collection('members')
         .doc(Provider.of<Authentication>(context, listen: false).getUserUid)
         .get()
@@ -329,7 +327,7 @@ class GroupMessageHelper with ChangeNotifier {
                   child: Text(
                     'Yes',
                     style: TextStyle(
-                      color: constantColors.blueColor,
+                      color: constantColors.whiteColor,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),

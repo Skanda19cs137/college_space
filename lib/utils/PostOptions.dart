@@ -1,10 +1,13 @@
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_space/constants/Constantcolors.dart';
+import 'package:college_space/screens/AltProfile/alt_profile.dart';
 import 'package:college_space/services/Authentication.dart';
 import 'package:college_space/services/FirebaseOperations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -203,6 +206,116 @@ class PostFunctions with ChangeNotifier {
     });
   }
 
+  showAwardsPresenter(BuildContext context,String postID){
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context){
+        return Container(
+        height: MediaQuery.of(context).size.height * 0.5,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 150.0),
+              child: Divider(
+                thickness: 4.0,
+                color: constantColors.whiteColor,
+              ),
+            ),
+            Container(
+              width: 200.0,
+              decoration: BoxDecoration(
+                  border: Border.all(color: constantColors.whiteColor),
+                  borderRadius: BorderRadius.circular(5.0)),
+              child: Center(
+                child: Text('Award Socialities',
+                    style: TextStyle(
+                        color: constantColors.blueColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold)),
+              ),
+            ),
+        Container(
+        height: MediaQuery.of(context).size.height * 0.4,
+        width: MediaQuery.of(context).size.width,
+        child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postID)
+            .collection('awards')
+            .orderBy('time')
+            .snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return Center(
+            child: CircularProgressIndicator()
+            );
+        }
+          else{
+            return new ListView(
+            children: snapshot.data.docs.map((DocumentSnapshot documentSnapshot){
+              return ListTile(
+                leading: GestureDetector(
+                  onTap: (){
+                    Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                            child: AltProfile(
+                              userUid: documentSnapshot.get('useruid'),
+                            ),
+                            type: PageTransitionType.bottomToTop));
+                  },
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      documentSnapshot.get('userimage')
+                    ),
+                    radius: 15.0,
+                    backgroundColor: constantColors.darkColor,
+                  ),
+                ),
+                trailing: Provider.of<Authentication>(context,
+                    listen: false)
+                    .getUserUid ==
+                    documentSnapshot.get('useruid')
+                    ? Container(
+                  width: 0.0,
+                  height: 0.0,
+                )
+                    : MaterialButton(
+                    child: Text(
+                      'Follow',
+                      style: TextStyle(
+                          color: constantColors.whiteColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0),
+                    ),
+                    onPressed: () {},
+                    color: constantColors.blueColor),
+                title: Text(documentSnapshot.get('username'),
+                    style: TextStyle(
+                    color: constantColors.blueColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0),
+                ),
+              );
+        }).toList()
+            );
+        }
+        },
+        ))
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: constantColors.blueGreyColor,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.0),
+              topRight: Radius.circular(12.0)),
+        )
+        );
+      });
+  }
+
   showCommentsSheet(
       BuildContext context, DocumentSnapshot snapshot, String docId) {
     return showModalBottomSheet(
@@ -273,6 +386,15 @@ class PostFunctions with ChangeNotifier {
                                             padding: const EdgeInsets.only(
                                                 left: 8.0),
                                             child: GestureDetector(
+                                              onTap: (){
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    PageTransition(
+                                                        child: AltProfile(
+                                                          userUid: documentSnapshot.get('useruid'),
+                                                        ),
+                                                        type: PageTransitionType.bottomToTop));
+                                              },
                                               child: CircleAvatar(
                                                 backgroundColor: constantColors
                                                     .blueGreyColor,
@@ -303,7 +425,7 @@ class PostFunctions with ChangeNotifier {
                                                       FontAwesomeIcons.arrowUp,
                                                       color: constantColors
                                                           .blueColor,
-                                                      size: 14.0,
+                                                      size: 12.0,
                                                     ),
                                                     onPressed: () {}),
                                                 Text(
@@ -328,11 +450,17 @@ class PostFunctions with ChangeNotifier {
                                         ],
                                       ),
                                       Container(
+                                        constraints: BoxConstraints(
+                                          maxWidth: MediaQuery.of(context).size.width*0.95
+                                        ),
                                         width:
-                                            MediaQuery.of(context).size.width,
+                                            MediaQuery.of(context).size.width*0.95,
                                         child: Row(
                                           children: [
                                             IconButton(
+                                              constraints: BoxConstraints(
+                                                maxWidth: 25.0
+                                              ),
                                                 icon: Icon(
                                                   Icons
                                                       .arrow_forward_ios_outlined,
@@ -342,24 +470,28 @@ class PostFunctions with ChangeNotifier {
                                                 ),
                                                 onPressed: () {}),
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.75,
+                                              constraints: BoxConstraints(
+                                                maxWidth: MediaQuery.of(context).size.width*0.6
+                                              ),
+
                                               child: Text(
                                                 documentSnapshot.get('comment'),
                                                 style: TextStyle(
                                                     color: constantColors
                                                         .whiteColor,
-                                                    fontSize: 16.0),
+                                                    fontSize: 14.0),
                                               ),
                                             ),
                                             IconButton(
+
+                                              constraints: BoxConstraints(
+                                                maxWidth: 25.0
+                                              ),
                                                 icon: Icon(
                                                     FontAwesomeIcons.trashAlt,
                                                     color:
                                                         constantColors.redColor,
-                                                    size: 16),
+                                                    size: 12),
                                                 onPressed: () {}),
                                           ],
                                         ),
@@ -372,12 +504,10 @@ class PostFunctions with ChangeNotifier {
                           },
                         )),
                     Container(
-                      /* color: constantColors.redColor,*/
-                      width: 400,
+
                       height: 50.0,
-                      /*
                       width: MediaQuery.of(context).size.width,
-                      */
+
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -475,6 +605,15 @@ class PostFunctions with ChangeNotifier {
                                 .map((DocumentSnapshot documentSnapshot) {
                           return ListTile(
                             leading: GestureDetector(
+                              onTap: (){
+                                Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                    child: AltProfile(
+                                        userUid: documentSnapshot.get('useruid'),
+                                    ),
+                                    type: PageTransitionType.bottomToTop));
+                              },
                               child: CircleAvatar(
                                 backgroundImage: NetworkImage(documentSnapshot
                                     .get('userimage')),
