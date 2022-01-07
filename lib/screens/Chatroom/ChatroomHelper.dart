@@ -78,14 +78,14 @@ class ChatroomHelper with ChangeNotifier {
                                 .map((DocumentSnapshot documentSnapshot) {
                               return GestureDetector(
                                 onTap: () {
-                                  //if(Provider.of<Authentication>(context, listen: false).getUserUid != (documentSnapshot.get('useruid'))){
-                                  //   Navigator.pushReplacement(context,
-                                  //     PageTransition(child: AltProfile(
-                                  //       useruid:documentSnapshot.data()['useruid']
-                                  //     ),
-                                  //         type: PageTransitionType.bottomToTop)
-                                  //   );
-                                  // }
+                                  if(Provider.of<Authentication>(context, listen: false).getUserUid != (documentSnapshot.get('useruid'))){
+                                     Navigator.pushReplacement(context,
+                                       PageTransition(child: AltProfile(
+                                         useruid:documentSnapshot.data()['useruid']
+                                       ),
+                                           type: PageTransitionType.bottomToTop)
+                                     );
+                                   }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 10.0),
