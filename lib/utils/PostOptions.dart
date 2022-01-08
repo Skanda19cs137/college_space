@@ -55,6 +55,8 @@ class PostFunctions with ChangeNotifier {
                                 fontSize: 16.0)),
                         onPressed: () {
                           showModalBottomSheet(
+                              enableDrag: true,
+                              isScrollControlled: true,
                               context: context,
                               builder: (context) {
                                 return Container(
@@ -65,6 +67,7 @@ class PostFunctions with ChangeNotifier {
                                         width: 300.0,
                                         height: 50.0,
                                         child: TextField(
+                                          enableInteractiveSelection: true,
                                           decoration: InputDecoration(
                                               hintText: 'Add New Caption',
                                               hintStyle: TextStyle(
@@ -90,7 +93,7 @@ class PostFunctions with ChangeNotifier {
                                             Provider.of<FirebaseOperations>(
                                                     context,
                                                     listen: false)
-                                                .updateCaption(postId, {
+                                                .updateCaption(postId:postId,userUid: Provider.of<Authentication>(context,listen: false).getUserUid, data: {
                                               'caption':
                                                   updatedCaptionController.text
                                             });
@@ -103,7 +106,7 @@ class PostFunctions with ChangeNotifier {
                       ),
                       MaterialButton(
                         color: constantColors.redColor,
-                        child: Text('Delete Caption',
+                        child: Text('Delete Post',
                             style: TextStyle(
                                 color: constantColors.whiteColor,
                                 fontWeight: FontWeight.bold,
@@ -326,7 +329,7 @@ class PostFunctions with ChangeNotifier {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-                height: MediaQuery.of(context).size.height * 0.75,
+                height: MediaQuery.of(context).size.height * 0.65,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
@@ -340,7 +343,8 @@ class PostFunctions with ChangeNotifier {
                     Container(
                       width: 100.0,
                       decoration: BoxDecoration(
-                          border: Border.all(color: constantColors.whiteColor),
+                          color: constantColors.lightColor,
+                          border: Border.all(color: constantColors.greyColor),
                           borderRadius: BorderRadius.circular(5.0)),
                       child: Center(
                         child: Text('Comments',
@@ -351,14 +355,14 @@ class PostFunctions with ChangeNotifier {
                       ),
                     ),
                     Container(
-                        height: MediaQuery.of(context).size.height * 0.61,
+                        height: MediaQuery.of(context).size.height * 0.52,
                         width: MediaQuery.of(context).size.width,
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('posts')
                               .doc(docId)
                               .collection('comments')
-                              .orderBy('time')
+                              .orderBy('time',descending: true)
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
@@ -371,9 +375,7 @@ class PostFunctions with ChangeNotifier {
                                   children: snapshot.data.docs
                                       .map((DocumentSnapshot documentSnapshot) {
                                 return Container(
-                                  /* color: constantColors.redColor,*/
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.15,
+                                  height:MediaQuery.of(context).size.height * 0.15,
                                   width: MediaQuery.of(context).size.width,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -391,13 +393,10 @@ class PostFunctions with ChangeNotifier {
                                                     context,
                                                     PageTransition(
                                                         child: AltProfile(
-                                                          userUid:
-                                                              documentSnapshot
-                                                                  .get(
-                                                                      'useruid'),
+                                                          userUid:documentSnapshot
+                                                                  .get('useruid'),
                                                         ),
-                                                        type: PageTransitionType
-                                                            .bottomToTop));
+                                                        type: PageTransitionType.bottomToTop));
                                               },
                                               child: CircleAvatar(
                                                 backgroundColor: constantColors
@@ -422,36 +421,6 @@ class PostFunctions with ChangeNotifier {
                                                   fontSize: 18.0),
                                             )),
                                           ),
-                                          Container(
-                                            child: Row(
-                                              children: [
-                                                IconButton(
-                                                    icon: Icon(
-                                                      FontAwesomeIcons.arrowUp,
-                                                      color: constantColors
-                                                          .blueColor,
-                                                      size: 12.0,
-                                                    ),
-                                                    onPressed: () {}),
-                                                Text(
-                                                  '0',
-                                                  style: TextStyle(
-                                                      color: constantColors
-                                                          .whiteColor,
-                                                      fontSize: 12.0,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                IconButton(
-                                                    icon: Icon(
-                                                        FontAwesomeIcons.reply,
-                                                        color: constantColors
-                                                            .yellowColor,
-                                                        size: 12),
-                                                    onPressed: () {}),
-                                              ],
-                                            ),
-                                          )
                                         ],
                                       ),
                                       Container(
@@ -491,15 +460,7 @@ class PostFunctions with ChangeNotifier {
                                                     fontSize: 14.0),
                                               ),
                                             ),
-                                            IconButton(
-                                                constraints: BoxConstraints(
-                                                    maxWidth: 25.0),
-                                                icon: Icon(
-                                                    FontAwesomeIcons.trashAlt,
-                                                    color:
-                                                        constantColors.redColor,
-                                                    size: 12),
-                                                onPressed: () {}),
+
                                           ],
                                         ),
                                       ),
@@ -542,7 +503,7 @@ class PostFunctions with ChangeNotifier {
                               ),
                               onPressed: () {
                                 print('Adding Comment....');
-                                addComment(context, snapshot.get('caption'),
+                                addComment(context, snapshot.get('postid'),
                                         commentController.text)
                                     .whenComplete(() {
                                   commentController.clear();

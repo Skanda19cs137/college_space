@@ -11,9 +11,9 @@ class AltProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:
-      Provider.of<AltProfileHelper>(context, listen: false).appBar(context),
+      appBar:Provider.of<AltProfileHelper>(context, listen: false).appBar(context),
       body: SingleChildScrollView(
+
         child: Container(
           child: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance.collection('users').doc(
@@ -44,7 +44,7 @@ class AltProfile extends StatelessWidget {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-              color: constantColors.blueGreyColor.withOpacity(0.6),
+              color: constantColors.blueGreyColor,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12.0),
                 topRight: Radius.circular(12.0)),

@@ -2,6 +2,7 @@ import 'dart:isolate';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_space/constants/Constantcolors.dart';
+import 'package:college_space/screens/AltProfile/alt_profile.dart';
 import 'package:college_space/screens/UploadPost/uploadPost.dart';
 import 'package:college_space/services/Authentication.dart';
 import 'package:college_space/utils/PostOptions.dart';
@@ -10,6 +11,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class FeedHelpers with ChangeNotifier {
@@ -58,7 +60,7 @@ class FeedHelpers with ChangeNotifier {
         padding: const EdgeInsets.only(top: 8.0),
         child: Container(
           child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+            stream: FirebaseFirestore.instance.collection('posts').orderBy('time',descending: true).snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
@@ -89,6 +91,7 @@ class FeedHelpers with ChangeNotifier {
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
     return ListView(
       children: snapshot.data.docs.map((DocumentSnapshot documentSnapshot) {
+        Provider.of<PostFunctions>(context,listen: false).showTimeAgo(documentSnapshot.get('time'));
         return Container(
           height: MediaQuery.of(context).size.height * 0.7,
           width: MediaQuery.of(context).size.width,
@@ -101,6 +104,12 @@ class FeedHelpers with ChangeNotifier {
                 child: Row(
                   children: [
                     GestureDetector(
+                      onTap: (){
+                        if(documentSnapshot.get('useruid')!=Provider.of<Authentication>(context,listen: false).getUserUid){
+                          Navigator.pushReplacement(context,
+                              PageTransition(child: AltProfile(userUid: documentSnapshot.get('useruid'),), type: PageTransitionType.leftToRight));
+                        }
+                      },
                       child: CircleAvatar(
                         backgroundColor: constantColors.transperant,
                         radius: 20.0,
@@ -122,8 +131,7 @@ class FeedHelpers with ChangeNotifier {
                           children: [
                             Container(
                               child: Text(
-                                  (documentSnapshot.data()
-                                      as dynamic)['caption'],
+                                  documentSnapshot.get('caption'),
                                   style: TextStyle(
                                       color: constantColors.greenColor,
                                       fontWeight: FontWeight.bold,
@@ -140,7 +148,7 @@ class FeedHelpers with ChangeNotifier {
                                       fontWeight: FontWeight.bold),
                                   children: <TextSpan>[
                                     TextSpan(
-                                        text: '12 hrs ago',
+                                        text: ',${Provider.of<PostFunctions>(context,listen: false).getImageTimePosted.toString()}',
                                         style: TextStyle(
                                             color: constantColors.lightColor))
                                   ]),
@@ -185,8 +193,7 @@ class FeedHelpers with ChangeNotifier {
                                         listen: false)
                                     .showLikes(
                                         context,
-                                        (documentSnapshot.data()
-                                            as dynamic)['caption']);
+                                        documentSnapshot.get('postid'));
                               },
                               onTap: () {
                                 print('Adding like....');
@@ -194,8 +201,7 @@ class FeedHelpers with ChangeNotifier {
                                         listen: false)
                                     .addLike(
                                         context,
-                                        (documentSnapshot.data()
-                                            as dynamic)['caption'],
+                                        documentSnapshot.get('postid'),
                                         Provider.of<Authentication>(context,
                                                 listen: false)
                                             .getUserUid);
@@ -209,8 +215,7 @@ class FeedHelpers with ChangeNotifier {
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('posts')
-                                    .doc((documentSnapshot.data()
-                                        as dynamic)['caption'])
+                                    .doc(documentSnapshot.get('postid'))
                                     .collection('likes')
                                     .snapshots(),
                                 builder: (context, snapshot) {
@@ -246,8 +251,7 @@ class FeedHelpers with ChangeNotifier {
                                     .showCommentsSheet(
                                         context,
                                         documentSnapshot,
-                                        (documentSnapshot.data()
-                                            as dynamic)['caption']);
+                                        documentSnapshot.get('postid'));
                               },
                               child: Icon(
                                 FontAwesomeIcons.comment,
@@ -258,8 +262,7 @@ class FeedHelpers with ChangeNotifier {
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('posts')
-                                    .doc((documentSnapshot.data()
-                                        as dynamic)['caption'])
+                                    .doc(documentSnapshot.get('postid'))
                                     .collection('comments')
                                     .snapshots(),
                                 builder: (context, snapshot) {
@@ -292,15 +295,14 @@ class FeedHelpers with ChangeNotifier {
                               onLongPress: (){
                                 Provider.of<PostFunctions>(context,
                                         listen: false).showAwardsPresenter(context,
-                                                documentSnapshot.get('caption'));
+                                                documentSnapshot.get('postid'));
                                 },
                               onTap: () {
                                 Provider.of<PostFunctions>(context,
                                         listen: false)
                                     .showReward(
                                         context,
-                                        (documentSnapshot.data()
-                                            as dynamic)['caption']);
+                                        documentSnapshot.get('postid'));
                               },
                               child: Icon(
                                 FontAwesomeIcons.award,
@@ -311,8 +313,7 @@ class FeedHelpers with ChangeNotifier {
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('posts')
-                                    .doc((documentSnapshot.data()
-                                        as dynamic)['caption'])
+                                    .doc(documentSnapshot.get('postid'))
                                     .collection('awards')
                                     .snapshots(),
                                 builder: (context, snapshot) {
@@ -345,7 +346,9 @@ class FeedHelpers with ChangeNotifier {
                                 EvaIcons.moreVertical,
                                 color: constantColors.whiteColor,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Provider.of<PostFunctions>(context,listen: false).showPostOption(context,documentSnapshot.get('postid'));
+                              },
                             )
                           : Container(
                               width: 0.0,

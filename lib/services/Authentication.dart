@@ -1,6 +1,8 @@
+import 'package:college_space/screens/LandingPage/landingServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class Authentication with ChangeNotifier
 {
@@ -11,7 +13,7 @@ class Authentication with ChangeNotifier
   String get getUserUid {
     return userUid;
   }
-  Future logIntoAccount(String email, String password) async{
+  Future logIntoAccount(BuildContext context,String email, String password) async{
     try {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
@@ -21,6 +23,7 @@ class Authentication with ChangeNotifier
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
+        Provider.of<LandingService>(context, listen: false).warningText(context, 'No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }

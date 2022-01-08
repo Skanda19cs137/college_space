@@ -100,12 +100,24 @@ class FirebaseOperations with ChangeNotifier {
         .delete();
   }
 
-  Future updateCaption(String postId, dynamic data) async {
+  Future updateCaption(
+      {@required String postId,
+        @required dynamic data,
+        @required String userUid}) async {
     return FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
-        .update(data);
+        .update(data)
+        .whenComplete(() {
+      return FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUid)
+          .collection('posts')
+          .doc(postId)
+          .update(data);
+    });
   }
+
 
   Future addAward(String postId, dynamic data) async {
     return FirebaseFirestore.instance
@@ -116,26 +128,26 @@ class FirebaseOperations with ChangeNotifier {
   }
 
   Future followUser(
-      String followingUid,
-      String followingDocId,
-      dynamic followingData,
-      String followerUid,
-      String followerDocId,
-      dynamic followerData) async{
-     return FirebaseFirestore.instance
-         .collection('users')
-         .doc(followingUid)
-         .collection('followers')
-         .doc(followingDocId)
-         .set(followingData)
-         .whenComplete(() async{
-         return FirebaseFirestore.instance
-           .collection('users')
-           .doc(followerUid)
-           .collection('following')
-           .doc(followerDocId)
-           .set(followerData);
-     });
+      {@required String followingUid,
+        @required String followingDocId,
+        @required dynamic followingData,
+        @required String followerUid,
+        @required String followerDocId,
+        @required dynamic followerData}) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(followingUid)
+        .collection('followers')
+        .doc(followingDocId)
+        .set(followingData)
+        .whenComplete(() async {
+      return FirebaseFirestore.instance
+          .collection('users')
+          .doc(followerUid)
+          .collection('following')
+          .doc(followerDocId)
+          .set(followerData);
+    });
 
   }
 }

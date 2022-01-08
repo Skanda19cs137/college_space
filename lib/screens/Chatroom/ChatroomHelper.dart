@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_space/constants/Constantcolors.dart';
+import 'package:college_space/screens/AltProfile/alt_profile.dart';
 import 'package:college_space/screens/Messaging/GroupMessage.dart';
 import 'package:college_space/screens/Profile/ProfileHelpers.dart';
 import 'package:college_space/services/Authentication.dart';
@@ -78,14 +79,13 @@ class ChatroomHelper with ChangeNotifier {
                                 .map((DocumentSnapshot documentSnapshot) {
                               return GestureDetector(
                                 onTap: () {
-                                  //if(Provider.of<Authentication>(context, listen: false).getUserUid != (documentSnapshot.get('useruid'))){
-                                  //   Navigator.pushReplacement(context,
-                                  //     PageTransition(child: AltProfile(
-                                  //       useruid:documentSnapshot.data()['useruid']
-                                  //     ),
-                                  //         type: PageTransitionType.bottomToTop)
-                                  //   );
-                                  // }
+                                  if(Provider.of<Authentication>(context, listen: false).getUserUid != (documentSnapshot.get('useruid'))){
+                                    Navigator.pushReplacement(context,
+                                      PageTransition(child: AltProfile(userUid:
+                                      documentSnapshot.get('useruid'),),
+                                          type: PageTransitionType.bottomToTop)
+                                    );
+                                  }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 10.0),

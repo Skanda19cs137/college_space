@@ -133,7 +133,7 @@ class LandingService with ChangeNotifier {
                             onPressed: () {
                               Provider.of<Authentication>(context,
                                       listen: false)
-                                  .logIntoAccount(
+                                  .logIntoAccount(context,
                                       documentSnapshot.get('useremail'),
                                       documentSnapshot.get('userpassword'))
                                   .whenComplete(() {
@@ -234,7 +234,7 @@ class LandingService with ChangeNotifier {
                       onPressed: () {
                         if (userEmailController.text.isNotEmpty) {
                           Provider.of<Authentication>(context, listen: false)
-                              .logIntoAccount(userEmailController.text,
+                              .logIntoAccount(context,userEmailController.text,
                                   userPasswordController.text)
                               .whenComplete(() {
                             Navigator.pushReplacement(
