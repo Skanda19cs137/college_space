@@ -18,7 +18,7 @@ class _SplashscreenState extends State<Splashscreen> {
   void initState() {
     Timer(
       Duration(
-        seconds: 2
+        seconds: 1
       ),
         () => Navigator.pushReplacement(context, PageTransition( type: PageTransitionType.fade, child: Landingpage()))
     );

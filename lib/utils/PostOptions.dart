@@ -278,24 +278,6 @@ class PostFunctions with ChangeNotifier {
                                     backgroundColor: constantColors.darkColor,
                                   ),
                                 ),
-                                trailing: Provider.of<Authentication>(context,
-                                                listen: false)
-                                            .getUserUid ==
-                                        documentSnapshot.get('useruid')
-                                    ? Container(
-                                        width: 0.0,
-                                        height: 0.0,
-                                      )
-                                    : MaterialButton(
-                                        child: Text(
-                                          'Follow',
-                                          style: TextStyle(
-                                              color: constantColors.whiteColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14.0),
-                                        ),
-                                        onPressed: () {},
-                                        color: constantColors.blueColor),
                                 title: Text(
                                   documentSnapshot.get('username'),
                                   style: TextStyle(
@@ -598,24 +580,7 @@ class PostFunctions with ChangeNotifier {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12.0),
                             ),
-                            trailing: Provider.of<Authentication>(context,
-                                            listen: false)
-                                        .getUserUid ==
-                                    documentSnapshot.get('useruid')
-                                ? Container(
-                                    width: 0.0,
-                                    height: 0.0,
-                                  )
-                                : MaterialButton(
-                                    child: Text(
-                                      'Follow',
-                                      style: TextStyle(
-                                          color: constantColors.whiteColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0),
-                                    ),
-                                    onPressed: () {},
-                                    color: constantColors.blueColor),
+
                           );
                         }).toList());
                       }

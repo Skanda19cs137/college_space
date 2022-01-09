@@ -102,7 +102,7 @@ class GroupMessageHelper with ChangeNotifier {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(left: 60.0, top: 7.0),
+                                const EdgeInsets.only(left: 25.0, top: 7.0),
                             child: Row(
                               children: [
                                 Padding(
@@ -142,10 +142,7 @@ class GroupMessageHelper with ChangeNotifier {
                                                           FontWeight.bold,
                                                       fontSize: 12.0),
                                                 ),
-                                                Provider.of<Authentication>(
-                                                                context,
-                                                                listen: false)
-                                                            .getUserUid ==
+                                                documentSnapshot.get('useruid') ==
                                                         adminUserUid
                                                     ? Padding(
                                                         padding:
@@ -194,39 +191,9 @@ class GroupMessageHelper with ChangeNotifier {
                               ],
                             ),
                           ),
+
                           Positioned(
-                            top: 0.0,
                               left: 10.0,
-                              child: Provider.of<Authentication>(context,
-                                              listen: false)
-                                          .getUserUid ==
-                                      (documentSnapshot.data()
-                                          as dynamic)['useruid']
-                                  ? Container(
-                                      child: Column(
-                                        children: [
-                                          IconButton(
-                                              icon: Icon(
-                                                Icons.edit,
-                                                color: constantColors.blueColor,
-                                                size: 14.0,
-                                              ),
-                                              onPressed: () {}),
-                                          IconButton(
-                                              icon: Icon(Icons.delete_rounded,
-                                                  color:
-                                                      constantColors.redColor,
-                                                  size: 14.0),
-                                              onPressed: () {})
-                                        ],
-                                      ),
-                                    )
-                                  : Container(
-                                      width: 0.0,
-                                      height: 0.0,
-                                    )),
-                          Positioned(
-                              left: 30.0,
                               child: Provider.of<Authentication>(context,
                                               listen: false)
                                           .getUserUid ==
