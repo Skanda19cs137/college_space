@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_space/constants/Constantcolors.dart';
 import 'package:college_space/screens/Homepage/Homepage.dart';
@@ -9,15 +11,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
 import 'LandingUtil.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class LandingService with ChangeNotifier {
   TextEditingController userEmailController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
   TextEditingController userPasswordController = TextEditingController();
   ConstantColors constantColors = ConstantColors();
-
   showUserAvatar(BuildContext context) {
     return showModalBottomSheet(
         context: context,
@@ -133,7 +135,7 @@ class LandingService with ChangeNotifier {
                             onPressed: () {
                               Provider.of<Authentication>(context,
                                       listen: false)
-                                  .logIntoAccount(
+                                  .logIntoAccount(context,
                                       documentSnapshot.get('useremail'),
                                       documentSnapshot.get('userpassword'))
                                   .whenComplete(() {
@@ -232,20 +234,20 @@ class LandingService with ChangeNotifier {
                         color: constantColors.whiteColor,
                       ),
                       onPressed: () {
-                        if (userEmailController.text.isNotEmpty) {
-                          Provider.of<Authentication>(context, listen: false)
-                              .logIntoAccount(userEmailController.text,
-                                  userPasswordController.text)
-                              .whenComplete(() {
-                            Navigator.pushReplacement(
-                                context,
-                                PageTransition(
-                                    child: Homepage(),
-                                    type: PageTransitionType.bottomToTop));
-                          });
-                        } else {
-                          warningText(context, 'Fill all the details');
-                        }
+                         if (userEmailController.text.isNotEmpty ) {
+                            Provider.of<Authentication>(context, listen: false)
+                                .logIntoAccount(context,userEmailController.text,
+                                userPasswordController.text)
+                                .whenComplete(() {
+                              Navigator.pushReplacement(
+                                  context,
+                                  PageTransition(
+                                      child: Homepage(),
+                                      type: PageTransitionType.bottomToTop));
+                            });
+                           } else {
+                            warningText(context, 'Fill all the details ');
+                          }
                       }),
                 ],
               ),
@@ -255,6 +257,7 @@ class LandingService with ChangeNotifier {
   }
 
   signUpSheet(BuildContext context) {
+
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -346,34 +349,45 @@ class LandingService with ChangeNotifier {
                           FontAwesomeIcons.check,
                           color: constantColors.whiteColor,
                         ),
+
                         onPressed: () {
-                          if (userEmailController.text.isNotEmpty) {
-                            Provider.of<Authentication>(context, listen: false)
-                                .createAccount(userEmailController.text,
-                                    userPasswordController.text)
-                                .whenComplete(() {
-                              print('Creating collection...');
-                              Provider.of<FirebaseOperations>(context,
-                                      listen: false)
-                                  .createUserCollection(context, {
-                                'userpassword': userPasswordController.text,
-                                'useruid': Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .getUserUid,
-                                'useremail': userEmailController.text,
-                                'username': userNameController.text,
-                                'userimage': Provider.of<LandingUtils>(context,
-                                        listen: false)
-                                    .getUserAvatarUrl,
-                              });
-                            }).whenComplete(() {
-                              Navigator.pushReplacement(
-                                  context,
-                                  PageTransition(
-                                      child: Homepage(),
-                                      type: PageTransitionType.bottomToTop));
-                            });
-                          } else {
+                          String canditdatePassword=userPasswordController.text;
+          String mediumPattern = r'^(?=.*?[!@#\$&*~]).{8,}';
+          String strongPattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+          if( canditdatePassword.contains(RegExp(strongPattern)) ) {
+            if (userEmailController.text.isNotEmpty) {
+              Provider.of<Authentication>(context, listen: false)
+                  .createAccount(userEmailController.text,
+                  userPasswordController.text)
+                  .whenComplete(() {
+                print('Creating collection...');
+                Provider.of<FirebaseOperations>(context,
+                    listen: false)
+                    .createUserCollection(context, {
+                  'userpassword': hashFunction(userPasswordController.text),
+                  'useruid': Provider
+                      .of<Authentication>(context,
+                      listen: false)
+                      .getUserUid,
+                  'useremail': userEmailController.text,
+                  'username': userNameController.text,
+                  'userimage': Provider
+                      .of<LandingUtils>(context,
+                      listen: false)
+                      .getUserAvatarUrl,
+                });
+              }).whenComplete(() {
+                Navigator.pushReplacement(
+                    context,
+                    PageTransition(
+                        child: Homepage(),
+                        type: PageTransitionType.bottomToTop));
+              });
+            }
+          }
+          else  if(! userPasswordController.text.contains(RegExp(mediumPattern))){
+            warningText(context, 'Weak Password');}
+          else {
                             warningText(context, 'Fill all the details');
                           }
                         }),
@@ -406,5 +420,11 @@ class LandingService with ChangeNotifier {
             ),
           );
         });
+  }
+  String hashFunction(String password){
+    var bytes = utf8.encode(password); // data being hashed
+    var digest = sha1.convert(bytes);
+
+    return digest.toString();
   }
 }

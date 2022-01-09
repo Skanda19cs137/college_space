@@ -10,7 +10,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeag0;
+import 'package:timeago/timeago.dart' as timeago;
+
+import '../AltProfile/alt_profile.dart';
 
 class ChatroomHelper with ChangeNotifier {
   String latestMessageTime;
@@ -81,7 +83,7 @@ class ChatroomHelper with ChangeNotifier {
                                   if(Provider.of<Authentication>(context, listen: false).getUserUid != (documentSnapshot.get('useruid'))){
                                      Navigator.pushReplacement(context,
                                        PageTransition(child: AltProfile(
-                                         useruid:documentSnapshot.data()['useruid']
+                                         userUid: documentSnapshot.get(['useruid'])
                                        ),
                                            type: PageTransitionType.bottomToTop)
                                      );
@@ -499,7 +501,7 @@ class ChatroomHelper with ChangeNotifier {
   showLastMessageTime(dynamic timeData) {
     Timestamp t = timeData;
     DateTime dateTime = t.toDate();
-    latestMessageTime = timeag0.format(dateTime);
+    latestMessageTime = timeago.format(dateTime);
     notifyListeners();
   }
 }

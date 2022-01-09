@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../screens/Profile/ProfileHelpers.dart';
 
 class Authentication with ChangeNotifier
 {
@@ -8,10 +11,10 @@ class Authentication with ChangeNotifier
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   String userUid;
-  String get getUserUid {
+  String get  getUserUid {
     return userUid;
   }
-  Future logIntoAccount(String email, String password) async{
+  Future logIntoAccount(BuildContext context,String email, String password) async{
     try {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
@@ -20,9 +23,9 @@ class Authentication with ChangeNotifier
       userUid= FirebaseAuth.instance.currentUser.uid;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+      warningText(context,'No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        warningText(context,'Wrong password provided for that user.');
       }
     }
 
@@ -31,6 +34,7 @@ class Authentication with ChangeNotifier
   }
 
   Future createAccount(String email, String password) async{
+
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
@@ -39,7 +43,8 @@ class Authentication with ChangeNotifier
       userUid= FirebaseAuth.instance.currentUser.uid;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        print('The password providederrorMessage = e.toString(); is too weak.');
+
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
       }
@@ -75,5 +80,27 @@ class Authentication with ChangeNotifier
 
   Future signOutWithGoogle() async{
     return googleSignIn.signOut();
+  }
+  warningText(BuildContext context, String warning) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            decoration: BoxDecoration(
+                color: constantColors.darkColor,
+                borderRadius: BorderRadius.circular(15.0)),
+            height: MediaQuery.of(context).size.height * 0.12,
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+              child: Text(
+                warning,
+                style: TextStyle(
+                    color: constantColors.whiteColor,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          );
+        });
   }
 }

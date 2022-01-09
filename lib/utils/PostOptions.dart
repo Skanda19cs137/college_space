@@ -326,7 +326,7 @@ class PostFunctions with ChangeNotifier {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-                height: MediaQuery.of(context).size.height * 0.75,
+                height: MediaQuery.of(context).size.height * 0.50,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
@@ -351,7 +351,7 @@ class PostFunctions with ChangeNotifier {
                       ),
                     ),
                     Container(
-                        height: MediaQuery.of(context).size.height * 0.61,
+                        height: MediaQuery.of(context).size.height * 0.38,
                         width: MediaQuery.of(context).size.width,
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance

@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:io';
-import 'package:js/js.dart';
-import 'package:universal_html/html.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_space/screens/LandingPage/LandingUtil.dart';
 import 'package:college_space/services/Authentication.dart';
@@ -21,7 +19,7 @@ class FirebaseOperations with ChangeNotifier {
         .collection('users')
         .doc(firebaseAuth.currentUser.uid)
         .get()
-      ..then((docu) {
+      .then((docu) {
         initUserName = docu.data()['username'];
       });
     return initUserName;
@@ -34,9 +32,9 @@ class FirebaseOperations with ChangeNotifier {
   String get getInitUserImage {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(firebaseAuth.currentUser.uid)
+        .doc(firebaseAuth.currentUser. uid)
         .get()
-      ..then((doc) {
+      .then((doc) {
         initUserImage = doc.data()['userimage'];
       });
     return initUserImage;
