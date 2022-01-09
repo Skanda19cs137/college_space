@@ -9,7 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 import 'LandingUtil.dart';
 
 class LandingService with ChangeNotifier {
@@ -347,33 +348,43 @@ class LandingService with ChangeNotifier {
                           color: constantColors.whiteColor,
                         ),
                         onPressed: () {
-                          if (userEmailController.text.isNotEmpty) {
-                            Provider.of<Authentication>(context, listen: false)
-                                .createAccount(userEmailController.text,
-                                    userPasswordController.text)
-                                .whenComplete(() {
-                              print('Creating collection...');
-                              Provider.of<FirebaseOperations>(context,
+                          String canditdatePassword=userPasswordController.text;
+                          String mediumPattern = r'^(?=.*?[!@#\$&*~]).{8,}';
+                          String strongPattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                          if( canditdatePassword.contains(RegExp(strongPattern)) ) {
+                            if (userEmailController.text.isNotEmpty) {
+                              Provider.of<Authentication>(context, listen: false)
+                                  .createAccount(userEmailController.text,
+                                  userPasswordController.text)
+                                  .whenComplete(() {
+                                print('Creating collection...');
+                                Provider.of<FirebaseOperations>(context,
+                                    listen: false)
+                                    .createUserCollection(context, {
+                                  'userpassword': hashFunction(userPasswordController.text),
+                                  'useruid': Provider
+                                      .of<Authentication>(context,
                                       listen: false)
-                                  .createUserCollection(context, {
-                                'userpassword': userPasswordController.text,
-                                'useruid': Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .getUserUid,
-                                'useremail': userEmailController.text,
-                                'username': userNameController.text,
-                                'userimage': Provider.of<LandingUtils>(context,
-                                        listen: false)
-                                    .getUserAvatarUrl,
+                                      .getUserUid,
+                                  'useremail': userEmailController.text,
+                                  'username': userNameController.text,
+                                  'userimage': Provider
+                                      .of<LandingUtils>(context,
+                                      listen: false)
+                                      .getUserAvatarUrl,
+                                });
+                              }).whenComplete(() {
+                                Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                        child: Homepage(),
+                                        type: PageTransitionType.bottomToTop));
                               });
-                            }).whenComplete(() {
-                              Navigator.pushReplacement(
-                                  context,
-                                  PageTransition(
-                                      child: Homepage(),
-                                      type: PageTransitionType.bottomToTop));
-                            });
-                          } else {
+                            }
+                          }
+                          else  if(! userPasswordController.text.contains(RegExp(mediumPattern))){
+                            warningText(context, 'Weak Password');}
+                          else {
                             warningText(context, 'Fill all the details');
                           }
                         }),
@@ -406,5 +417,11 @@ class LandingService with ChangeNotifier {
             ),
           );
         });
+  }
+  String hashFunction(String password){
+    var bytes = utf8.encode(password); // data being hashed
+    var digest = sha1.convert(bytes);
+
+    return digest.toString();
   }
 }
