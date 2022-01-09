@@ -21,7 +21,7 @@ class FirebaseOperations with ChangeNotifier {
         .collection('users')
         .doc(firebaseAuth.currentUser.uid)
         .get()
-      ..then((docu) {
+        .then((docu) {
         initUserName = docu.data()['username'];
       });
     return initUserName;
@@ -36,7 +36,7 @@ class FirebaseOperations with ChangeNotifier {
         .collection('users')
         .doc(firebaseAuth.currentUser.uid)
         .get()
-      ..then((doc) {
+      .then((doc) {
         initUserImage = doc.data()['userimage'];
       });
     return initUserImage;
