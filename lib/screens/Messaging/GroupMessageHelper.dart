@@ -232,7 +232,7 @@ class GroupMessageHelper with ChangeNotifier {
           .getInitUserName,
       'userimage': Provider.of<FirebaseOperations>(context, listen: false)
           .getInitUserImage,
-    });
+    }).whenComplete(() {messageController.clear();});
   }
 
   Future checkIfJoined(BuildContext context, String chatroomName,

@@ -1,10 +1,8 @@
 import 'dart:ui';
 
 import 'package:college_space/screens/AltProfile/alt_profile.dart';
-import 'package:college_space/screens/AltProfile/alt_profile_helper.dart';
 import 'package:college_space/screens/LandingPage/landingPage.dart';
 import 'package:college_space/services/Authentication.dart';
-import 'package:college_space/services/FirebaseOperations.dart';
 import 'package:college_space/utils/PostOptions.dart';
 import 'package:js/js.dart';
 import 'package:page_transition/page_transition.dart';
@@ -436,46 +434,7 @@ class ProfileHelpers with ChangeNotifier {
                                       color: constantColors.whiteColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.0)),
-                              onPressed: () {
-                                Provider.of<FirebaseOperations>(context, listen: false)
-                                    .unFollowUser(
-                                    followingUid: documentSnapshot.get('useruid'),
-                                    followingDocId: Provider.of<Authentication>(context,
-                                        listen: false)
-                                        .getUserUid,
-                                    followingData: {
-                                      'username': Provider.of<FirebaseOperations>(context,
-                                          listen: false)
-                                          .getInitUserName,
-                                      'userimage': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                          .getInitUserImage,
-                                      'useruid': Provider.of<Authentication>(context,
-                                          listen: false)
-                                          .getUserUid,
-                                      'useremail': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                          .getInitUserEmail,
-                                      'time': Timestamp.now(),
-                                    },
-                                    followerUid: Provider.of<Authentication>(context,
-                                        listen: false)
-                                        .getUserUid,
-                                    followerDocId: documentSnapshot.get('useruid'),
-                                    followerData: {
-                                      'username': documentSnapshot.get('username'),
-                                      'userimage': documentSnapshot.get('userimage'),
-                                      'useremail': documentSnapshot.get('useremail'),
-                                      'useruid': documentSnapshot.get('useruid'),
-                                      'time': Timestamp.now(),
-                                    })
-                                    .whenComplete(() {
-                                  Provider.of<AltProfileHelper>(context,listen: false).followedNotification(
-                                      context,'Unfollowed', documentSnapshot.get('username'));
-                                });
-                              },
+                              onPressed: () {},
                             ),
                             leading: CircleAvatar(
                               backgroundColor: constantColors.darkColor,
@@ -545,6 +504,17 @@ class ProfileHelpers with ChangeNotifier {
                               }
 
                             },
+                            trailing:documentSnapshot.get('useruid')==Provider.of<Authentication>(context,listen: false).getUserUid ?
+                                Container(height: 0.0,width: 0.0,)
+                                :MaterialButton(
+                              color: constantColors.blueColor,
+                              child: Text('Unfollow',
+                                  style: TextStyle(
+                                      color: constantColors.whiteColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16.0)),
+                              onPressed: () {},
+                            ),
                             leading: CircleAvatar(
                               backgroundColor: constantColors.darkColor,
                               backgroundImage: NetworkImage(

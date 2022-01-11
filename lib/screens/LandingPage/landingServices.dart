@@ -238,6 +238,8 @@ class LandingService with ChangeNotifier {
                               .logIntoAccount(context,userEmailController.text,
                                   userPasswordController.text)
                               .whenComplete(() {
+                                userEmailController.clear();
+                                userPasswordController.clear();
                             Navigator.pushReplacement(
                                 context,
                                 PageTransition(
@@ -374,6 +376,9 @@ class LandingService with ChangeNotifier {
                                       .getUserAvatarUrl,
                                 });
                               }).whenComplete(() {
+                                userPasswordController.clear();
+                                userEmailController.clear();
+                                userNameController.clear();
                                 Navigator.pushReplacement(
                                     context,
                                     PageTransition(
