@@ -16,15 +16,7 @@ class FirebaseOperations with ChangeNotifier {
   String initUserName;
   String initUserImage;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  String get getInitUserName {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(firebaseAuth.currentUser.uid)
-        .get()
-        .then((docu) {
-        initUserName = docu.data()['username'];
-      });
-    return initUserName;
+  String get getInitUserName {return initUserName;
   }
 
   String get getInitUserEmail {
@@ -32,13 +24,6 @@ class FirebaseOperations with ChangeNotifier {
   }
 
   String get getInitUserImage {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(firebaseAuth.currentUser.uid)
-        .get()
-      .then((doc) {
-        initUserImage = doc.data()['userimage'];
-      });
     return initUserImage;
   }
 

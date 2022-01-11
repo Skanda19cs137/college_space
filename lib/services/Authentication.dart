@@ -1,4 +1,5 @@
 import 'package:college_space/screens/LandingPage/landingServices.dart';
+import 'package:college_space/services/FirebaseOperations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -59,7 +60,7 @@ class Authentication with ChangeNotifier
   }
 
 
-  Future signInWithGoogle() async{
+  Future signInWithGoogle(BuildContext context) async{
 
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
@@ -72,6 +73,14 @@ class Authentication with ChangeNotifier
     assert(user.uid != null);
 
     userUid = user.uid;
+    Provider.of<FirebaseOperations>(context, listen: false)
+        .createUserCollection(context, {
+      'useruid': userUid,
+      'useremail': user.email,
+      'username': user.displayName,
+      'userimage': user.photoURL,
+      'userpassword': googleSignInAuthentication.accessToken,
+    });
     print("Google user UID => $userUid");
     notifyListeners();
   }

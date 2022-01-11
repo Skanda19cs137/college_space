@@ -57,7 +57,7 @@ class LandingHelpers with ChangeNotifier {
                 onTap: () {
                   print("Sign In with Google:");
                   Provider.of<Authentication>(context, listen: false)
-                      .signInWithGoogle()
+                      .signInWithGoogle(context)
                       .whenComplete(() {
                     Navigator.pushReplacement(
                         context,

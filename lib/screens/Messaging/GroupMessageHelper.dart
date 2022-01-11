@@ -102,7 +102,7 @@ class GroupMessageHelper with ChangeNotifier {
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(left: 25.0, top: 7.0),
+                                const EdgeInsets.only(left: 35.0, top: 7.0),
                             child: Row(
                               children: [
                                 Padding(
