@@ -284,7 +284,7 @@ class AltProfileHelper with ChangeNotifier {
                           })
                           .whenComplete(() {
                         followedNotification(
-                            context, snapshot.data.get('username'));
+                            context, snapshot.data.get('username'),'Followed');
                       });
                     },
                     color: constantColors.blueColor,
@@ -417,7 +417,7 @@ class AltProfileHelper with ChangeNotifier {
     );
   }
 
-  followedNotification(BuildContext context, String name) {
+  followedNotification(BuildContext context, String name,String data) {
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -435,7 +435,7 @@ class AltProfileHelper with ChangeNotifier {
                       color: constantColors.whiteColor,
                     ),
                   ),
-                  Text('Followed $name',
+                  Text('$data $name',
                       style: TextStyle(
                         color: constantColors.whiteColor,
                         fontWeight: FontWeight.bold,
@@ -495,23 +495,7 @@ class AltProfileHelper with ChangeNotifier {
                                         type: PageTransitionType.leftToRight));
                               }
                             },
-                            trailing: documentSnapshot.get('useruid') ==
-                                    Provider.of<Authentication>(context,
-                                            listen: false)
-                                        .getUserUid
-                                ? Container(
-                                    width: 0.0,
-                                    height: 0.0,
-                                  )
-                                : MaterialButton(
-                                    color: constantColors.blueColor,
-                                    child: Text('Unfollow',
-                                        style: TextStyle(
-                                            color: constantColors.whiteColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.0)),
-                                    onPressed: () {},
-                                  ),
+
                             leading: CircleAvatar(
                               backgroundColor: constantColors.darkColor,
                               backgroundImage: NetworkImage(
