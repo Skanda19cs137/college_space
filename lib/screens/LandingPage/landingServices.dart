@@ -233,17 +233,18 @@ class LandingService with ChangeNotifier {
                         color: constantColors.whiteColor,
                       ),
                       onPressed: () {
-                        if (userEmailController.text.isNotEmpty) {
+                        if (userEmailController.text.isNotEmpty && userPasswordController.text.isNotEmpty) {
                           Provider.of<Authentication>(context, listen: false)
                               .logIntoAccount(context,userEmailController.text,
-                                  userPasswordController.text)
-                              .whenComplete(() {
+                              hashFunction(userPasswordController.text )).whenComplete(()
+                          {
                             Navigator.pushReplacement(
                                 context,
                                 PageTransition(
                                     child: Homepage(),
                                     type: PageTransitionType.bottomToTop));
                           });
+
                         } else {
                           warningText(context, 'Fill all the details');
                         }
