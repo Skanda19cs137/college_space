@@ -429,7 +429,9 @@ class ProfileHelpers with ChangeNotifier {
                                       ),
                                       type: PageTransitionType.bottomToTop));
                             },
-                            trailing: MaterialButton(
+                            trailing:documentSnapshot.get('useruid')==Provider.of<Authentication>(context,listen: false).getUserUid ?
+                            Container(height: 0.0,width: 0.0,)
+                                :MaterialButton(
                               color: constantColors.blueColor,
                               child: Text('Unfollow',
                                   style: TextStyle(
@@ -472,8 +474,8 @@ class ProfileHelpers with ChangeNotifier {
                                       'time': Timestamp.now(),
                                     })
                                     .whenComplete(() {
-                                  Provider.of<AltProfileHelper>(context,listen: false).followedNotification(
-                                      context,'Unfollowed', documentSnapshot.get('username'));
+                                  Provider.of<AltProfileHelper>(context,listen:false).followedNotification(
+                                      context, documentSnapshot.get('username'),'Unfollowed');
                                 });
                               },
                             ),
@@ -545,6 +547,7 @@ class ProfileHelpers with ChangeNotifier {
                               }
 
                             },
+
                             leading: CircleAvatar(
                               backgroundColor: constantColors.darkColor,
                               backgroundImage: NetworkImage(

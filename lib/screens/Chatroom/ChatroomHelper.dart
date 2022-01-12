@@ -364,6 +364,7 @@ class ChatroomHelper with ChangeNotifier {
                                       listen: false)
                                   .getUserUid
                             }).whenComplete(() {
+                              chatroomNameController.clear();
                               Navigator.pop(context);
                             });
                           })
@@ -423,12 +424,12 @@ class ChatroomHelper with ChangeNotifier {
                         .snapshots(),
                     builder: (context, snapshot) {
                       showLastMessageTime(
-                          snapshot.data.docs.first.get('time'));
+                          (snapshot.data.docs.first.data() as dynamic)['time']);
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
                       } else {
                         return Text(
-                          getLatestMessageTime.toString(),
+                          getLatestMessageTime,
                           style: TextStyle(
                               color: constantColors.whiteColor,
                               fontWeight: FontWeight.bold,
@@ -459,7 +460,8 @@ class ChatroomHelper with ChangeNotifier {
                         (snapshot.data.docs.first.data()
                                 as dynamic)['message'] !=
                             null) {
-                      return Text('${(snapshot.data.docs.first.data() as dynamic)['username']} : ${(snapshot.data.docs.first.data() as dynamic)['message']}',
+                      return Text(
+                          '${(snapshot.data.docs.first.data() as dynamic)['username']} : ${(snapshot.data.docs.first.data() as dynamic)['message']}',
                           style: TextStyle(
                               color: constantColors.greenColor,
                               fontSize: 14.0,

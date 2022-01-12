@@ -158,6 +158,4 @@ class FirebaseOperations with ChangeNotifier {
           .delete();
     });
   }
-
-
 }

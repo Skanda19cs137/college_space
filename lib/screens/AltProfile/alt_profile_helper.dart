@@ -169,7 +169,7 @@ class AltProfileHelper with ChangeNotifier {
                               )),
                           GestureDetector(
                               onTap: () {
-                                CheckFollowingSheet(context, snapshot);
+                                //CheckFollowingSheet(context, snapshot);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -284,7 +284,7 @@ class AltProfileHelper with ChangeNotifier {
                           })
                           .whenComplete(() {
                         followedNotification(
-                            context,'Followed', snapshot.data.get('username'));
+                            context, snapshot.data.get('username'),'Followed');
                       });
                     },
                     color: constantColors.blueColor,
@@ -417,7 +417,7 @@ class AltProfileHelper with ChangeNotifier {
     );
   }
 
-  followedNotification(BuildContext context,String data, String name) {
+  followedNotification(BuildContext context, String name,String data) {
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -449,71 +449,6 @@ class AltProfileHelper with ChangeNotifier {
             decoration: BoxDecoration(
                 color: constantColors.darkColor,
                 borderRadius: BorderRadius.circular(12.0)),
-          );
-        });
-  }
-
-  CheckFollowingSheet(BuildContext context, dynamic snapshot) {
-    return showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                color: constantColors.blueGreyColor,
-                borderRadius: BorderRadius.circular(12.0)),
-            child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(snapshot.data.data()['useruid'])
-                    .collection('following')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else {
-                    return new ListView(
-                        children: snapshot.data.docs
-                            .map((DocumentSnapshot documentSnapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
-                          } else {
-                            return new ListTile(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      PageTransition(
-                                          child: AltProfile(
-                                            userUid:
-                                            documentSnapshot.get('useruid'),
-                                          ),
-                                          type: PageTransitionType.bottomToTop));
-                                },
-                                leading: CircleAvatar(
-                                  backgroundColor: constantColors.darkColor,
-                                  backgroundImage: NetworkImage(
-                                    documentSnapshot.get('userimage'),
-                                  ),
-                                ),
-                                title: Text(
-                                  documentSnapshot.get('username'),
-                                  style: TextStyle(
-                                      color: constantColors.whiteColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0),
-                                ),
-                                subtitle: Text(
-                                  documentSnapshot.get('useremail'),
-                                  style: TextStyle(
-                                      color: constantColors.yellowColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14.0),
-                                ));
-                          }
-                        }).toList());
-                  }
-                }),
           );
         });
   }
@@ -560,6 +495,7 @@ class AltProfileHelper with ChangeNotifier {
                                         type: PageTransitionType.leftToRight));
                               }
                             },
+
                             leading: CircleAvatar(
                               backgroundColor: constantColors.darkColor,
                               backgroundImage: NetworkImage(

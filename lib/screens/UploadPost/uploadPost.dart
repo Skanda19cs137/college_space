@@ -326,6 +326,7 @@ class UploadPost with ChangeNotifier {
                               .getInitUserEmail,
                         });
                       }).whenComplete(() {
+                        captionController.clear();
                         Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);
